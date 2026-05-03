@@ -40,19 +40,43 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           </motion.div>
         </div>
 
-        <svg className="absolute inset-0 w-full h-full">
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           {POS.map((pos, idx) => {
             if (idx === 0) return null;
             const prev = POS[idx - 1];
             const c = done(idx);
+            
+            const sign = idx % 2 === 0 ? 1 : -1;
+            const midX = (prev.x + pos.x) / 2 + (sign * 8); 
+            const midY = (prev.y + pos.y) / 2 - (sign * 12);
+            const pathData = `M ${prev.x} ${prev.y} Q ${midX} ${midY} ${pos.x} ${pos.y}`;
+
             return (
-              <motion.line key={`p-${idx}`} x1={`${prev.x + 2}%`} y1={`${prev.y}%`} x2={`${pos.x + 2}%`} y2={`${pos.y}%`}
+              <motion.path key={`p-${idx}`} d={pathData} fill="none" vectorEffect="non-scaling-stroke"
                 stroke={c ? "#f39c12" : done(idx) || open(idx + 1) ? "rgba(243,156,18,0.4)" : "rgba(255,255,255,0.1)"}
-                strokeWidth={c ? "2.5" : "1.5"} strokeDasharray={c ? "none" : "6 4"}
+                strokeWidth={c ? "2.5" : "1.5"} strokeDasharray={c ? "none" : "1 1.5"}
                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: idx * 0.15 }} />
             );
           })}
         </svg>
+
+        {(() => {
+          const currentPosIdx = Math.min(completedChallenges.length, 9);
+          const currentPos = POS[currentPosIdx];
+          return (
+            <motion.div
+              className="absolute z-20"
+              initial={false}
+              animate={{ left: `${currentPos.x}%`, top: `${currentPos.y}%` }}
+              transition={{ type: "spring", stiffness: 40, damping: 12 }}
+              style={{ transform: "translate(-50%, -100%)", marginTop: "-15px" }}
+            >
+              <motion.div animate={{ rotate: [-3, 3, -3], y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="text-3xl md:text-4xl drop-shadow-xl">
+                🚢
+              </motion.div>
+            </motion.div>
+          );
+        })()}
 
         {POS.map((pos, idx) => {
           const cid = idx + 1;

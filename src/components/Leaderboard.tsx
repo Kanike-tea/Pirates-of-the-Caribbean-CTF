@@ -233,46 +233,76 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
         </div>
       </div>
 
-      {/* Finished teams ranking */}
-      {teams.some((t) => t.finished_at) && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-4 rounded-xl bg-gradient-to-br from-gold-900/20 to-pirate-dark border border-gold-800/30"
-        >
-          <h3 className="font-[family-name:var(--font-pirate)] text-xl text-gold-400 mb-3 flex items-center gap-2">
-            <Trophy className="w-5 h-5" />
-            Finished Crews
-          </h3>
-          <div className="space-y-2">
-            {teams
-              .filter((t) => t.finished_at)
-              .sort(
-                (a, b) =>
-                  new Date(a.finished_at!).getTime() -
-                  new Date(b.finished_at!).getTime()
-              )
-              .map((team, idx) => (
-                <div
-                  key={team.id}
-                  className="flex items-center gap-3 text-sm"
-                >
-                  <span className="text-gold-400 font-bold w-6">
-                    {idx + 1}.
-                  </span>
-                  <Ship className="w-4 h-4 text-gold-500" />
-                  <span className="text-parchment font-semibold">
-                    {team.name}
-                  </span>
-                  <span className="ml-auto text-ocean-300 text-xs flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {new Date(team.finished_at!).toLocaleTimeString()}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </motion.div>
-      )}
+      {/* Live Leaderboard */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-8 p-4 md:p-6 rounded-2xl bg-gradient-to-br from-pirate-dark/80 to-pirate-navy/80 border border-gold-800/30 backdrop-blur-sm"
+      >
+        <h3 className="font-[family-name:var(--font-pirate)] text-2xl text-gold-400 mb-6 flex items-center justify-center gap-2">
+          <Trophy className="w-6 h-6" />
+          Live Standings
+        </h3>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[400px]">
+            <thead>
+              <tr className="border-b border-gold-800/50 text-gold-500 text-sm font-semibold">
+                <th className="pb-3 pl-2 w-16">Rank</th>
+                <th className="pb-3">Crew Name</th>
+                <th className="pb-3 text-center">Progress</th>
+                <th className="pb-3 text-right pr-2">Last Update</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teams.map((team, idx) => {
+                const isCurrentTeam = team.id === currentTeamId;
+                const isFinished = team.progress >= 10;
+                return (
+                  <motion.tr 
+                    key={team.id}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className={`border-b border-ocean-900/30 last:border-0 transition-colors ${
+                      isCurrentTeam ? "bg-gold-900/10" : "hover:bg-white/5"
+                    }`}
+                  >
+                    <td className="py-3 pl-2">
+                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-pirate-black/50 text-gold-400 font-bold text-xs border border-gold-800/30">
+                        {idx + 1}
+                      </span>
+                    </td>
+                    <td className="py-3 font-semibold text-sm">
+                      <span className={isCurrentTeam ? "text-gold-300" : "text-parchment"}>
+                        {team.name}
+                      </span>
+                      {isFinished && <span className="ml-2 text-xs">🏴‍☠️</span>}
+                    </td>
+                    <td className="py-3 text-center">
+                      <span className={`text-sm font-mono ${isFinished ? "text-gold-400" : "text-ocean-300"}`}>
+                        {team.progress}/10
+                      </span>
+                    </td>
+                    <td className="py-3 text-right pr-2 text-xs text-ocean-500">
+                      {team.finished_at ? (
+                        <span className="text-gold-500 flex items-center justify-end gap-1"><Clock className="w-3 h-3" /> {new Date(team.finished_at).toLocaleTimeString()}</span>
+                      ) : (
+                        <span>En route...</span>
+                      )}
+                    </td>
+                  </motion.tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {teams.length === 0 && (
+            <div className="text-center py-8 text-ocean-600 italic text-sm">
+              No crews have set sail yet.
+            </div>
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 }

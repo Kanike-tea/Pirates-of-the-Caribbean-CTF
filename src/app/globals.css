@@ -27,9 +27,9 @@
 
   --color-parchment: #f5e6c8;
   --color-parchment-dark: #e8d5a8;
-  --color-pirate-black: #1a1a2e;
-  --color-pirate-dark: #16213e;
-  --color-pirate-navy: #0f3460;
+  --color-pirate-black: #020202;
+  --color-pirate-dark: #07090f;
+  --color-pirate-navy: #0a0f18;
   --color-blood-red: #c0392b;
   --color-blood-dark: #922b21;
   --color-treasure-gold: #f39c12;
@@ -42,6 +42,7 @@
 /* Global resets and pirate theme */
 html {
   scroll-behavior: smooth;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2300ff41" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>') 12 12, crosshair;
 }
 
 body {
@@ -53,24 +54,21 @@ body {
 /* Parchment texture overlay */
 .parchment-bg {
   background:
-    linear-gradient(
-      135deg,
-      rgba(245, 230, 200, 0.05) 0%,
-      rgba(232, 213, 168, 0.03) 50%,
-      rgba(245, 230, 200, 0.05) 100%
-    ),
+    linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px),
     var(--color-pirate-black);
+  background-size: 30px 30px;
 }
 
 /* Sea/Ocean gradient */
 .ocean-bg {
   background: linear-gradient(
     180deg,
-    #0a1628 0%,
-    #0f3460 30%,
-    #1a5276 50%,
-    #1b6b93 70%,
-    #2980b9 100%
+    #000000 0%,
+    #020b14 30%,
+    #051525 50%,
+    #082035 70%,
+    #0a2845 100%
   );
 }
 
