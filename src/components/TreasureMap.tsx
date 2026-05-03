@@ -6,6 +6,7 @@ import { MapPin, X, Skull, Anchor, Compass, Lock, Unlock, ChevronRight, CloudLig
 import ChallengeModal from "./ChallengeModal";
 import { ClientChallenge } from "@/lib/challenges";
 import PirateShip from "./PirateShip";
+import StormySeasBackground from "./StormySeasBackground";
 
 interface TreasureMapProps {
   challenges: ClientChallenge[];
@@ -34,65 +35,14 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         <p className="text-parchment-dark text-sm opacity-70">Complete each challenge to stamp yer mark and advance toward the Black Pearl</p>
       </div>
 
-      <div className="relative w-full rounded-2xl overflow-hidden border-2 border-gold-800/50" style={{ aspectRatio: "16/9", background: "radial-gradient(ellipse at 30% 50%, rgba(232,213,168,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(243,156,18,0.05) 0%, transparent 50%), linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" }}>
-        <div className="absolute top-4 right-4 opacity-20">
+      <div className="relative w-full rounded-2xl overflow-hidden border-2 border-gold-800/50" style={{ aspectRatio: "16/9", backgroundColor: "#0f172a" }}>
+        <div className="absolute top-4 right-4 opacity-20 z-10 pointer-events-none">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
             <Compass className="w-16 h-16 text-gold-500" />
           </motion.div>
         </div>
 
-        {/* Animated Waves */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={`wave-${i}`}
-            className="absolute text-ocean-400/10 z-0 pointer-events-none"
-            style={{
-              top: `${15 + i * 15}%`,
-              left: `${(i * 25) % 80 + 10}%`,
-            }}
-            animate={{
-              x: [0, 40, 0],
-              y: [0, i % 2 === 0 ? -10 : 10, 0],
-              opacity: [0.1, 0.3, 0.1]
-            }}
-            transition={{
-              duration: 12 + i * 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <Waves className="w-16 h-16 md:w-24 md:h-24" />
-          </motion.div>
-        ))}
-
-        {/* Little Storms */}
-        <motion.div
-          className="absolute z-0 text-slate-400/20 pointer-events-none"
-          style={{ top: "25%", left: "35%" }}
-          animate={{ x: [0, 30, 0], y: [0, 10, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <CloudLightning className="w-24 h-24 md:w-32 md:h-32 drop-shadow-2xl" />
-          <motion.div
-            className="absolute inset-0 bg-white/30 rounded-full blur-2xl"
-            animate={{ opacity: [0, 0, 0.8, 0, 0, 0.6, 0] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-          />
-        </motion.div>
-
-        <motion.div
-          className="absolute z-0 text-slate-400/20 pointer-events-none"
-          style={{ top: "60%", left: "70%" }}
-          animate={{ x: [0, -20, 0], y: [0, -15, 0] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 5 }}
-        >
-          <CloudLightning className="w-20 h-20 md:w-28 md:h-28 drop-shadow-2xl" />
-          <motion.div
-            className="absolute inset-0 bg-yellow-400/20 rounded-full blur-xl"
-            animate={{ opacity: [0, 1, 0, 0, 0, 0.5, 0] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
-          />
-        </motion.div>
+        <StormySeasBackground />
 
         <svg className="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
           {POS.map((pos, idx) => {
