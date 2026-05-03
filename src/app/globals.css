@@ -1,26 +1,237 @@
+@import url("https://fonts.googleapis.com/css2?family=Pirata+One&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Code:wght@400;500&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+@theme {
+  --color-gold-50: #fefce8;
+  --color-gold-100: #fef9c3;
+  --color-gold-200: #fef08a;
+  --color-gold-300: #fde047;
+  --color-gold-400: #facc15;
+  --color-gold-500: #eab308;
+  --color-gold-600: #ca8a04;
+  --color-gold-700: #a16207;
+  --color-gold-800: #854d0e;
+  --color-gold-900: #713f12;
+
+  --color-ocean-50: #ecfeff;
+  --color-ocean-100: #cffafe;
+  --color-ocean-200: #a5f3fc;
+  --color-ocean-300: #67e8f9;
+  --color-ocean-400: #22d3ee;
+  --color-ocean-500: #06b6d4;
+  --color-ocean-600: #0891b2;
+  --color-ocean-700: #0e7490;
+  --color-ocean-800: #155e75;
+  --color-ocean-900: #164e63;
+
+  --color-parchment: #f5e6c8;
+  --color-parchment-dark: #e8d5a8;
+  --color-pirate-black: #1a1a2e;
+  --color-pirate-dark: #16213e;
+  --color-pirate-navy: #0f3460;
+  --color-blood-red: #c0392b;
+  --color-blood-dark: #922b21;
+  --color-treasure-gold: #f39c12;
+
+  --font-pirate: "Pirata One", "Georgia", serif;
+  --font-body: "Crimson Text", "Georgia", serif;
+  --font-mono: "Fira Code", "Courier New", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Global resets and pirate theme */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-pirate-black);
+  color: var(--color-parchment);
+  font-family: var(--font-body);
+}
+
+/* Parchment texture overlay */
+.parchment-bg {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(245, 230, 200, 0.05) 0%,
+      rgba(232, 213, 168, 0.03) 50%,
+      rgba(245, 230, 200, 0.05) 100%
+    ),
+    var(--color-pirate-black);
+}
+
+/* Sea/Ocean gradient */
+.ocean-bg {
+  background: linear-gradient(
+    180deg,
+    #0a1628 0%,
+    #0f3460 30%,
+    #1a5276 50%,
+    #1b6b93 70%,
+    #2980b9 100%
+  );
+}
+
+/* Gold shimmer text */
+.gold-text {
+  background: linear-gradient(
+    135deg,
+    #f39c12 0%,
+    #f1c40f 25%,
+    #e67e22 50%,
+    #f1c40f 75%,
+    #f39c12 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Wave animation for ocean */
+@keyframes wave {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-5px) translateY(-3px);
+  }
+  50% {
+    transform: translateX(0) translateY(-5px);
+  }
+  75% {
+    transform: translateX(5px) translateY(-3px);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+}
+
+.animate-wave {
+  animation: wave 4s ease-in-out infinite;
+}
+
+/* Ship bobbing */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(0.5deg);
+  }
+}
+
+.animate-bob {
+  animation: bob 3s ease-in-out infinite;
+}
+
+/* Treasure stamp */
+@keyframes stampIn {
+  0% {
+    transform: scale(3) rotate(-15deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(3deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-stamp {
+  animation: stampIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Glow pulse for active elements */
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(243, 156, 18, 0.6),
+      0 0 40px rgba(243, 156, 18, 0.3);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Dotted path animation */
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-dash {
+  animation: dash 2s linear forwards;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-pirate-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-pirate-navy);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-700);
+}
+
+/* Code blocks in challenges */
+pre {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(243, 156, 18, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: var(--color-gold-300);
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
 }
