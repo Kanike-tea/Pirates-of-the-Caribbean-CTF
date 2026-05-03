@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, X, Skull, Anchor, Compass, Lock, Unlock, ChevronRight } from "lucide-react";
+import { MapPin, X, Skull, Anchor, Compass, Lock, Unlock, ChevronRight, CloudLightning, Waves } from "lucide-react";
 import ChallengeModal from "./ChallengeModal";
 import { ClientChallenge } from "@/lib/challenges";
+import PirateShip from "./PirateShip";
 
 interface TreasureMapProps {
   challenges: ClientChallenge[];
@@ -40,7 +41,60 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           </motion.div>
         </div>
 
-        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {/* Animated Waves */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`wave-${i}`}
+            className="absolute text-ocean-400/10 z-0 pointer-events-none"
+            style={{
+              top: `${15 + i * 15}%`,
+              left: `${(i * 25) % 80 + 10}%`,
+            }}
+            animate={{
+              x: [0, 40, 0],
+              y: [0, i % 2 === 0 ? -10 : 10, 0],
+              opacity: [0.1, 0.3, 0.1]
+            }}
+            transition={{
+              duration: 12 + i * 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <Waves className="w-16 h-16 md:w-24 md:h-24" />
+          </motion.div>
+        ))}
+
+        {/* Little Storms */}
+        <motion.div
+          className="absolute z-0 text-slate-400/20 pointer-events-none"
+          style={{ top: "25%", left: "35%" }}
+          animate={{ x: [0, 30, 0], y: [0, 10, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <CloudLightning className="w-24 h-24 md:w-32 md:h-32 drop-shadow-2xl" />
+          <motion.div
+            className="absolute inset-0 bg-white/30 rounded-full blur-2xl"
+            animate={{ opacity: [0, 0, 0.8, 0, 0, 0.6, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
+
+        <motion.div
+          className="absolute z-0 text-slate-400/20 pointer-events-none"
+          style={{ top: "60%", left: "70%" }}
+          animate={{ x: [0, -20, 0], y: [0, -15, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        >
+          <CloudLightning className="w-20 h-20 md:w-28 md:h-28 drop-shadow-2xl" />
+          <motion.div
+            className="absolute inset-0 bg-yellow-400/20 rounded-full blur-xl"
+            animate={{ opacity: [0, 1, 0, 0, 0, 0.5, 0] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
+
+        <svg className="absolute inset-0 w-full h-full z-10 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
           {POS.map((pos, idx) => {
             if (idx === 0) return null;
             const prev = POS[idx - 1];
@@ -65,14 +119,14 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           const currentPos = POS[currentPosIdx];
           return (
             <motion.div
-              className="absolute z-20"
+              className="absolute z-20 w-12 h-12 md:w-16 md:h-16 text-neutral-800"
               initial={false}
               animate={{ left: `${currentPos.x}%`, top: `${currentPos.y}%` }}
               transition={{ type: "spring", stiffness: 40, damping: 12 }}
-              style={{ transform: "translate(-50%, -100%)", marginTop: "-15px" }}
+              style={{ transform: "translate(-50%, -100%)", marginTop: "-5px" }}
             >
-              <motion.div animate={{ rotate: [-3, 3, -3], y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="text-3xl md:text-4xl drop-shadow-xl">
-                🚢
+              <motion.div animate={{ rotate: [-3, 3, -3], y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="w-full h-full drop-shadow-xl">
+                <PirateShip className="w-full h-full" />
               </motion.div>
             </motion.div>
           );
@@ -141,7 +195,7 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         {selectedChallenge && (
           <ChallengeModal challenge={selectedChallenge} teamId={teamId}
             onClose={() => setSelectedChallenge(null)}
-            onSuccess={(id) => { onChallengeComplete(id); setSelectedChallenge(null); }} />
+            onSuccess={(id: number) => { onChallengeComplete(id); setSelectedChallenge(null); }} />
         )}
       </AnimatePresence>
     </div>

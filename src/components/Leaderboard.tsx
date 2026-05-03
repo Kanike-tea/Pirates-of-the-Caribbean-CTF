@@ -4,8 +4,20 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Ship, Trophy, Clock, Anchor } from "lucide-react";
 import { supabase, Team } from "@/lib/supabase";
+import PirateShip from "./PirateShip";
 
-const SHIP_EMOJIS = ["⛵", "🚢", "⛵", "🏴‍☠️", "⚓", "🚢", "⛵", "🏴‍☠️", "⚓", "🚢"];
+const SHIP_COLORS = [
+  "text-red-500",
+  "text-blue-500",
+  "text-green-500",
+  "text-purple-500",
+  "text-yellow-500",
+  "text-pink-500",
+  "text-cyan-500",
+  "text-orange-500",
+  "text-teal-500",
+  "text-indigo-500",
+];
 
 const TEAM_COLORS = [
   "from-red-500 to-red-700",
@@ -182,38 +194,37 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                       }}
                     />
 
-                    {/* Ship icon */}
-                    <motion.div
-                      className="absolute top-1/2 -translate-y-1/2 z-10"
-                      initial={{ left: "0%" }}
-                      animate={{
-                        left: `calc(${Math.min(progressPercent, 95)}% - 12px)`,
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 80,
-                        damping: 15,
-                      }}
-                    >
-                      <motion.span
-                        className="text-lg md:text-xl block"
-                        animate={
-                          !isFinished
-                            ? {
-                                y: [0, -3, 0, -2, 0],
-                                rotate: [0, 2, -1, 1, 0],
-                              }
-                            : {}
-                        }
+                      <motion.div
+                        className={`absolute top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 -mt-1 ${SHIP_COLORS[index % SHIP_COLORS.length]}`}
+                        initial={{ left: "0%" }}
+                        animate={{
+                          left: `calc(${Math.min(progressPercent, 95)}% - 16px)`,
+                        }}
                         transition={{
-                          duration: 3 + index * 0.3,
-                          repeat: Infinity,
-                          ease: "easeInOut",
+                          type: "spring",
+                          stiffness: 80,
+                          damping: 15,
                         }}
                       >
-                        {isFinished ? "🏴‍☠️" : SHIP_EMOJIS[index % SHIP_EMOJIS.length]}
-                      </motion.span>
-                    </motion.div>
+                        <motion.div
+                          className="w-full h-full"
+                          animate={
+                            !isFinished
+                              ? {
+                                  y: [0, -3, 0, -2, 0],
+                                  rotate: [0, 2, -1, 1, 0],
+                                }
+                              : {}
+                          }
+                          transition={{
+                            duration: 3 + index * 0.3,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          {isFinished ? <span className="text-2xl ml-1">🏴‍☠️</span> : <PirateShip className="w-full h-full" />}
+                        </motion.div>
+                      </motion.div>
                   </div>
 
                   {/* Progress counter */}
