@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Pirates of the Caribbean CTF — Cybersecurity Treasure Hunt",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased min-h-screen parchment-bg">
+        <CustomCursor />
         {children}
       </body>
     </html>
