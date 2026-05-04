@@ -182,9 +182,9 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                   <div className="flex-1 relative h-8 bg-pirate-navy/50 rounded-full overflow-hidden border border-ocean-800/50">
                     {/* Progress water */}
                     <motion.div
-                      className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${
+                      className={`absolute inset-y-0 left-0 rounded-full overflow-hidden bg-gradient-to-r ${
                         TEAM_COLORS[index % TEAM_COLORS.length]
-                      } opacity-30`}
+                      } opacity-40`}
                       initial={{ width: "0%" }}
                       animate={{ width: `${progressPercent}%` }}
                       transition={{
@@ -192,7 +192,27 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                         stiffness: 100,
                         damping: 20,
                       }}
-                    />
+                    >
+                      {/* Animated Waves */}
+                      <motion.div 
+                        className="absolute inset-0 w-[200%] text-white opacity-30"
+                        animate={{ x: ["0%", "-50%"] }}
+                        transition={{ duration: 2 + (index % 3), repeat: Infinity, ease: "linear" }}
+                      >
+                        <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="w-full h-full">
+                          <path d="M0,16 C150,32 450,0 600,16 C750,32 1050,0 1200,16 L1200,32 L0,32 Z" fill="currentColor"></path>
+                        </svg>
+                      </motion.div>
+                      <motion.div 
+                        className="absolute inset-0 w-[200%] text-white opacity-20"
+                        animate={{ x: ["-50%", "0%"] }}
+                        transition={{ duration: 3 + (index % 2), repeat: Infinity, ease: "linear" }}
+                      >
+                        <svg viewBox="0 0 1200 32" preserveAspectRatio="none" className="w-full h-full">
+                          <path d="M0,16 C150,0 450,32 600,16 C750,0 1050,32 1200,16 L1200,32 L0,32 Z" fill="currentColor"></path>
+                        </svg>
+                      </motion.div>
+                    </motion.div>
 
                       <motion.div
                         className={`absolute top-1/2 -translate-y-1/2 z-10 w-8 h-8 md:w-10 md:h-10 -mt-1 ${SHIP_COLORS[index % SHIP_COLORS.length]}`}
