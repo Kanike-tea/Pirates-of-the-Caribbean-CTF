@@ -7,6 +7,7 @@ import ChallengeModal from "./ChallengeModal";
 import { ClientChallenge } from "@/lib/challenges";
 import PirateShip from "./PirateShip";
 import StormySeasBackground from "./StormySeasBackground";
+import VintageCompass from "./VintageCompass";
 
 interface TreasureMapProps {
   challenges: ClientChallenge[];
@@ -36,9 +37,9 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
       </div>
 
       <div className="relative w-full rounded-2xl overflow-hidden border-[6px] border-amber-900/80 shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
-        <div className="absolute top-4 right-4 opacity-20 z-10 pointer-events-none">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
-            <Compass className="w-16 h-16 text-amber-900" />
+        <div className="absolute top-4 right-4 opacity-30 z-10 pointer-events-none drop-shadow-md">
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
+            <VintageCompass className="w-24 h-24 text-amber-900 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
           </motion.div>
         </div>
 

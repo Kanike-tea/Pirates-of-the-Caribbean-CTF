@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
+import { Anchor } from "lucide-react";
 
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
@@ -93,9 +94,9 @@ export default function CustomCursor() {
         }}
         transition={{ duration: 0.15 }}
       />
-      {/* Inner dot */}
+      {/* Inner dot / Anchor */}
       <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 rounded-full bg-gold-400 pointer-events-none z-[10000]"
+        className="fixed top-0 left-0 pointer-events-none z-[10000] text-amber-900"
         style={{
           x: dotSpringX,
           y: dotSpringY,
@@ -104,10 +105,13 @@ export default function CustomCursor() {
           opacity: isVisible ? 1 : 0,
         }}
         animate={{
-          scale: isText ? 0 : 1, // Shrink to nothing when over text
+          scale: isText ? 0 : isHovering ? 1.2 : 1, // Shrink to nothing when over text
+          rotate: isHovering ? -15 : 0, // Slight tilt when hovering
         }}
         transition={{ duration: 0.1 }}
-      />
+      >
+        <Anchor className="w-6 h-6 drop-shadow-[0_0_3px_rgba(245,230,200,0.8)]" strokeWidth={2.5} />
+      </motion.div>
     </>
   );
 }
