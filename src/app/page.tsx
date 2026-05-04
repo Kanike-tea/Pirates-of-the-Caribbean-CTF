@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Skull, Anchor, Ship } from "lucide-react";
+import { Skull, Anchor, Ship, ShieldAlert } from "lucide-react";
+import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import TreasureMap from "@/components/TreasureMap";
 import BlackPearlVictory from "@/components/BlackPearlVictory";
@@ -135,7 +136,15 @@ export default function Home() {
   // Join Screen
   if (view === "join") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 relative">
+        <Link 
+          href="/admin" 
+          className="absolute top-6 right-6 flex items-center gap-2 text-blood-red/70 hover:text-blood-red transition-colors cursor-pointer text-sm font-semibold bg-blood-red/10 px-3 py-2 rounded-lg border border-blood-red/20 hover:bg-blood-red/20"
+          title="Captain's Quarters"
+        >
+          <ShieldAlert className="w-5 h-5" />
+          <span className="hidden sm:inline">Captain's Quarters</span>
+        </Link>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center">
 
@@ -220,13 +229,23 @@ export default function Home() {
               <p className="text-[10px] text-ocean-500">Crew: {team?.name}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-gold-500 font-mono">{team?.progress || 0}/10</span>
-            <div className="w-20 h-1.5 bg-pirate-navy rounded-full overflow-hidden">
-              <motion.div className="h-full bg-gold-500 rounded-full"
-                animate={{ width: `${((team?.progress || 0) / 10) * 100}%` }}
-                transition={{ type: "spring", stiffness: 100 }} />
+          <div className="flex items-center gap-4 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-gold-500 font-mono">{team?.progress || 0}/10</span>
+              <div className="w-20 h-1.5 bg-pirate-navy rounded-full overflow-hidden">
+                <motion.div className="h-full bg-gold-500 rounded-full"
+                  animate={{ width: `${((team?.progress || 0) / 10) * 100}%` }}
+                  transition={{ type: "spring", stiffness: 100 }} />
+              </div>
             </div>
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 text-blood-red/80 hover:text-blood-red transition-colors bg-blood-red/10 px-2 py-1.5 rounded-lg border border-blood-red/20 hover:bg-blood-red/20"
+              title="Captain's Quarters"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline font-semibold">Admin</span>
+            </Link>
           </div>
         </div>
 

@@ -25,7 +25,7 @@ export default function StormySeasBackground() {
   const drops = Array.from({ length: 80 });
 
   return (
-    <div className="absolute inset-0 bg-[#020617] overflow-hidden pointer-events-none z-0">
+    <div className="absolute inset-0 bg-transparent overflow-hidden pointer-events-none z-0 opacity-80 mix-blend-multiply">
       
       {/* Background Lighting / Flash */}
       <motion.div 
@@ -37,24 +37,24 @@ export default function StormySeasBackground() {
 
       {/* Epic Layered Clouds (Top) */}
       <motion.div 
-        className="absolute top-[-5%] left-[-10%] w-[120%] h-[40%] bg-[#0f172a] blur-3xl z-0 rounded-full"
+        className="absolute top-[-5%] left-[-10%] w-[120%] h-[40%] bg-[#713f12] blur-3xl z-0 rounded-full opacity-30"
         animate={{ x: ["-2%", "2%", "-2%"] }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div 
-        className="absolute top-[-10%] left-[-5%] w-[110%] h-[35%] bg-[#1e293b] blur-2xl z-0 rounded-full opacity-80"
+        className="absolute top-[-10%] left-[-5%] w-[110%] h-[35%] bg-[#451a03] blur-2xl z-0 rounded-full opacity-40"
         animate={{ x: ["2%", "-2%", "2%"] }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div 
-        className="absolute top-[10%] left-[20%] w-[60%] h-[20%] bg-[#334155] blur-xl z-0 rounded-full opacity-50"
-        animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.5, 0.3] }}
+        className="absolute top-[10%] left-[20%] w-[60%] h-[20%] bg-[#713f12] blur-xl z-0 rounded-full opacity-20"
+        animate={{ scale: [1, 1.05, 1], opacity: [0.2, 0.3, 0.2] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* Lightning Bolts */}
       <motion.svg 
-        className="absolute top-0 right-[20%] w-32 h-64 z-0 text-yellow-100"
+        className="absolute top-0 right-[20%] w-32 h-64 z-0 text-amber-100"
         initial={{ opacity: 0 }}
         animate={{ opacity: lightning ? 0.9 : 0 }}
         transition={{ duration: 0.05 }}
@@ -64,7 +64,7 @@ export default function StormySeasBackground() {
       </motion.svg>
 
       <motion.svg 
-        className="absolute top-[10%] left-[30%] w-20 h-48 z-0 text-cyan-50"
+        className="absolute top-[10%] left-[30%] w-20 h-48 z-0 text-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: lightning ? 0.8 : 0 }}
         transition={{ duration: 0.05, delay: 0.05 }}
@@ -88,7 +88,7 @@ export default function StormySeasBackground() {
         {drops.map((_, i) => (
           <motion.div
             key={i}
-            className="absolute bg-gradient-to-b from-transparent via-white/30 to-white/50 w-[1px]"
+            className="absolute bg-gradient-to-b from-transparent via-[#713f12]/20 to-[#451a03]/30 w-[1px]"
             style={{
               left: `${(i / drops.length) * 100}%`,
               top: `${Math.random() * -50}%`,
@@ -107,7 +107,7 @@ export default function StormySeasBackground() {
 
       {/* Sea Background Glow */}
       <motion.div 
-        className="absolute bottom-0 left-0 right-0 h-48 bg-cyan-900/20 blur-3xl z-0"
+        className="absolute bottom-0 left-0 right-0 h-48 bg-[#451a03]/20 blur-3xl z-0"
         animate={{ opacity: lightning ? 0.6 : 0.2 }}
       />
 
@@ -116,7 +116,7 @@ export default function StormySeasBackground() {
         
         {/* Layer 1 (Back Dark Waves) */}
         <motion.div 
-          className="absolute w-[200%] bottom-[20%] text-[#0f172a]"
+          className="absolute w-[200%] bottom-[20%] text-[#713f12] opacity-40"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         >
@@ -128,7 +128,7 @@ export default function StormySeasBackground() {
 
         {/* Layer 2 (Mid Ocean Waves) */}
         <motion.div 
-          className="absolute w-[200%] bottom-[10%] text-[#1e3a8a]"
+          className="absolute w-[200%] bottom-[10%] text-[#854d0e] opacity-40"
           animate={{ x: ["-50%", "0%"] }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         >
@@ -140,14 +140,14 @@ export default function StormySeasBackground() {
 
         {/* Layer 3 (Front Aggressive Waves with Whitecaps) */}
         <motion.div 
-          className="absolute w-[200%] bottom-[-5%] text-[#1e293b]"
+          className="absolute w-[200%] bottom-[-5%] text-[#451a03] opacity-60"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         >
           <svg viewBox="0 0 2400 120" preserveAspectRatio="none" className="w-full h-40">
              {/* Foam / Whitecaps */}
-             <path d="M0,80 C250,-10 350,130 600,80 C850,30 950,130 1200,80 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.15)" transform="translate(-8, -8)"></path>
-             <path d="M1200,80 C1450,-10 1550,130 1800,80 C2050,30 2150,130 2400,80 L2400,120 L1200,120 Z" fill="rgba(255,255,255,0.15)" transform="translate(-8, -8)"></path>
+             <path d="M0,80 C250,-10 350,130 600,80 C850,30 950,130 1200,80 L1200,120 L0,120 Z" fill="rgba(245,230,200,0.5)" transform="translate(-8, -8)"></path>
+             <path d="M1200,80 C1450,-10 1550,130 1800,80 C2050,30 2150,130 2400,80 L2400,120 L1200,120 Z" fill="rgba(245,230,200,0.5)" transform="translate(-8, -8)"></path>
              
              {/* Main wave body */}
              <path d="M0,80 C250,-10 350,130 600,80 C850,30 950,130 1200,80 L1200,120 L0,120 Z" fill="currentColor"></path>

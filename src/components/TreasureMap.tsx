@@ -35,10 +35,10 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         <p className="text-parchment-dark text-sm opacity-70">Complete each challenge to stamp yer mark and advance toward the Black Pearl</p>
       </div>
 
-      <div className="relative w-full rounded-2xl overflow-hidden border-2 border-gold-800/50" style={{ aspectRatio: "16/9", backgroundColor: "#0f172a" }}>
+      <div className="relative w-full rounded-2xl overflow-hidden border-[6px] border-amber-900/80 shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
         <div className="absolute top-4 right-4 opacity-20 z-10 pointer-events-none">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
-            <Compass className="w-16 h-16 text-gold-500" />
+            <Compass className="w-16 h-16 text-amber-900" />
           </motion.div>
         </div>
 
@@ -57,8 +57,8 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
 
             return (
               <motion.path key={`p-${idx}`} d={pathData} fill="none" vectorEffect="non-scaling-stroke"
-                stroke={c ? "#f39c12" : done(idx) || open(idx + 1) ? "rgba(243,156,18,0.4)" : "rgba(255,255,255,0.1)"}
-                strokeWidth={c ? "2.5" : "1.5"} strokeDasharray={c ? "none" : "1 1.5"}
+                stroke={c ? "#713f12" : done(idx) || open(idx + 1) ? "rgba(113,63,18,0.5)" : "rgba(113,63,18,0.15)"}
+                strokeWidth={c ? "2.5" : "1.5"} strokeDasharray={c ? "none" : "3 3"}
                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: idx * 0.15 }} />
             );
           })}
@@ -100,21 +100,21 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
                 onClick={() => { if (unlocked && ch && !completed) setSelectedChallenge(ch); }}
                 disabled={!unlocked || completed}
                 className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all cursor-pointer
-                  ${completed ? "bg-blood-red border-2 border-blood-dark shadow-lg shadow-red-900/50"
-                    : unlocked ? "bg-gradient-to-br from-gold-600 to-gold-800 border-2 border-gold-400 animate-glow"
-                    : "bg-pirate-navy/80 border-2 border-ocean-800/50 opacity-50 cursor-not-allowed"}`}>
+                  ${completed ? "bg-blood-red border-2 border-amber-900 shadow-md shadow-red-900/40"
+                    : unlocked ? "bg-amber-100 border-2 border-amber-900 shadow-[0_0_15px_rgba(180,83,9,0.4)] animate-glow"
+                    : "bg-transparent border-2 border-amber-900/30 border-dashed opacity-60 cursor-not-allowed"}`}>
                 {completed ? (
                   <motion.div initial={{ scale: 3, rotate: -15, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 15 }}>
                     <X className="w-6 h-6 md:w-7 md:h-7 text-white" strokeWidth={4} />
                   </motion.div>
-                ) : unlocked ? <Unlock className="w-4 h-4 md:w-5 md:h-5 text-pirate-black" />
-                  : <Lock className="w-4 h-4 md:w-5 md:h-5 text-ocean-600" />}
+                ) : unlocked ? <Unlock className="w-4 h-4 md:w-5 md:h-5 text-amber-900" />
+                  : <Lock className="w-4 h-4 md:w-5 md:h-5 text-amber-900/50" />}
               </motion.button>
               <div className={`absolute whitespace-nowrap text-[10px] md:text-xs font-bold mt-1 left-1/2 -translate-x-1/2 ${idx % 2 === 0 ? "top-full" : "bottom-full mb-1"}`}>
                 <div className="flex items-center gap-1">
-                  <Icon className="w-3 h-3 text-gold-500" />
-                  <span className={completed ? "text-blood-red line-through" : unlocked ? "text-gold-400" : "text-ocean-600"}>
+                  <Icon className="w-3 h-3 text-amber-900" />
+                  <span className={completed ? "text-blood-red line-through" : unlocked ? "text-amber-900 font-extrabold" : "text-amber-900/60"}>
                     {cid === 10 ? "☠️ Final" : `Ch.${cid}`}
                   </span>
                 </div>
@@ -123,8 +123,8 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           );
         })}
 
-        <div className="absolute bottom-2 left-2 text-xs text-gold-600 font-[family-name:var(--font-pirate)]">🏝️ Port Royal</div>
-        <div className="absolute top-2 right-16 text-xs text-gold-400 font-[family-name:var(--font-pirate)] flex items-center gap-1">
+        <div className="absolute bottom-2 left-2 text-xs text-amber-900 font-[family-name:var(--font-pirate)]">🏝️ Port Royal</div>
+        <div className="absolute top-2 right-16 text-xs text-amber-950 font-[family-name:var(--font-pirate)] flex items-center gap-1">
           <span>The Black Pearl</span><ChevronRight className="w-3 h-3" /><span>🏴‍☠️</span>
         </div>
       </div>
