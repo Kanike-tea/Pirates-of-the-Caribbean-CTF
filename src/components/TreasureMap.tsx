@@ -104,7 +104,6 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
                 className={`relative flex items-center justify-center transition-all w-16 h-16 md:w-20 md:h-20
                   ${unlocked && !completed ? "cursor-pointer drop-shadow-[0_0_10px_rgba(180,83,9,0.3)] animate-glow" : !unlocked ? "opacity-60 cursor-not-allowed" : ""}`}>
                 
-                {/* The Island */}
                 <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full drop-shadow-sm" style={{ transform: `rotate(${idx * 45}deg)` }}>
                   <path
                     d="M50 5 C 70 2, 90 15, 95 35 C 98 55, 85 85, 65 95 C 40 100, 15 85, 5 65 C -2 45, 15 15, 35 10 C 40 8, 45 6, 50 5 Z"
@@ -114,6 +113,17 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
                     strokeLinejoin="round"
                   />
                   <path d="M 30 40 Q 40 30 50 45 T 70 35 M 40 65 Q 55 55 65 70" fill="none" stroke="#713f12" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+                  
+                  {/* Palm Tree 1 */}
+                  <g transform="translate(15, 20) scale(0.4)" opacity="0.6">
+                    <path d="M 25 70 Q 35 55 26 45" stroke="#713f12" strokeWidth="4" fill="none" strokeLinecap="round" />
+                    <path d="M 26 45 Q 10 45 5 55 Q 16 42 26 45 M 26 45 Q 40 45 45 55 Q 36 42 26 45 M 26 45 Q 15 25 10 15 Q 22 30 26 45 M 26 45 Q 35 25 40 15 Q 30 30 26 45 M 26 45 Q 26 20 26 10 Q 28 30 26 45" fill="#713f12" />
+                  </g>
+                  {/* Palm Tree 2 */}
+                  <g transform="translate(65, 45) scale(0.3) scale(-1, 1)" opacity="0.5">
+                    <path d="M 25 70 Q 35 55 26 45" stroke="#713f12" strokeWidth="4" fill="none" strokeLinecap="round" />
+                    <path d="M 26 45 Q 10 45 5 55 Q 16 42 26 45 M 26 45 Q 40 45 45 55 Q 36 42 26 45 M 26 45 Q 15 25 10 15 Q 22 30 26 45 M 26 45 Q 35 25 40 15 Q 30 30 26 45 M 26 45 Q 26 20 26 10 Q 28 30 26 45" fill="#713f12" />
+                  </g>
                 </svg>
 
                 {/* The Red Cross or Lock/Unlock */}
