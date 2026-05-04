@@ -8,6 +8,7 @@ import Leaderboard from "@/components/Leaderboard";
 import TreasureMap from "@/components/TreasureMap";
 import BlackPearlVictory from "@/components/BlackPearlVictory";
 import PirateShip from "@/components/PirateShip";
+import InstructionsModal from "@/components/InstructionsModal";
 import { supabase, Team } from "@/lib/supabase";
 import { ClientChallenge } from "@/lib/challenges";
 
@@ -24,6 +25,7 @@ export default function Home() {
   const [joinError, setJoinError] = useState("");
   const [showVictory, setShowVictory] = useState(false);
   const [activeTab, setActiveTab] = useState<"map" | "race">("map");
+  const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
 
   // Fetch challenges on mount
   useEffect(() => {
@@ -138,6 +140,14 @@ export default function Home() {
   if (view === "join") {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 relative">
+        <button 
+          onClick={() => setIsInstructionsOpen(true)}
+          className="absolute top-6 left-6 flex items-center gap-2 text-ocean-400 hover:text-ocean-200 transition-colors cursor-pointer text-sm font-semibold bg-ocean-900/30 px-3 py-2 rounded-lg border border-ocean-500/30 hover:bg-ocean-800/40"
+          title="Captain's Orders"
+        >
+          <span className="text-xl">📜</span>
+          <span className="hidden sm:inline">Instructions</span>
+        </button>
         <Link 
           href="/admin" 
           className="absolute top-6 right-6 flex items-center gap-2 text-blood-red/70 hover:text-blood-red transition-colors cursor-pointer text-sm font-semibold bg-blood-red/10 px-3 py-2 rounded-lg border border-blood-red/20 hover:bg-blood-red/20"
@@ -245,6 +255,14 @@ export default function Home() {
                   transition={{ type: "spring", stiffness: 100 }} />
               </div>
             </div>
+            <button
+              onClick={() => setIsInstructionsOpen(true)}
+              className="flex items-center gap-1.5 text-ocean-400 hover:text-ocean-200 transition-colors bg-ocean-900/30 px-2 py-1.5 rounded-lg border border-ocean-500/30 hover:bg-ocean-800/40 cursor-pointer"
+              title="Captain's Orders"
+            >
+              <span>📜</span>
+              <span className="hidden sm:inline font-semibold">Rules</span>
+            </button>
             <Link
               href="/admin"
               className="flex items-center gap-1.5 text-blood-red/80 hover:text-blood-red transition-colors bg-blood-red/10 px-2 py-1.5 rounded-lg border border-blood-red/20 hover:bg-blood-red/20"
@@ -290,6 +308,8 @@ export default function Home() {
           )}
         </AnimatePresence>
       </main>
+
+      <InstructionsModal isOpen={isInstructionsOpen} onClose={() => setIsInstructionsOpen(false)} />
     </div>
   );
 }
