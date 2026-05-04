@@ -36,8 +36,9 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         <p className="text-parchment-dark text-sm opacity-70">Complete each challenge to stamp yer mark and advance toward the Black Pearl</p>
       </div>
 
-      <div className="relative w-full rounded-2xl overflow-hidden border-[6px] border-amber-900/80 shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
-        <div className="absolute top-4 right-4 opacity-30 z-10 pointer-events-none drop-shadow-md">
+      <div className="ripped-border-shadow">
+        <div className="relative w-full overflow-hidden ripped-border shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
+          <div className="absolute top-4 right-4 opacity-30 z-10 pointer-events-none drop-shadow-md">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
             <VintageCompass className="w-24 h-24 text-amber-900 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
           </motion.div>
@@ -97,26 +98,39 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
                 <motion.div className="absolute inset-0 -m-2 rounded-full bg-gold-400/20"
                   animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.1, 0.3] }} transition={{ duration: 2, repeat: Infinity }} />
               )}
-              <motion.button whileHover={unlocked ? { scale: 1.15 } : {}} whileTap={unlocked ? { scale: 0.95 } : {}}
+              <motion.button whileHover={unlocked && !completed ? { scale: 1.15 } : {}} whileTap={unlocked && !completed ? { scale: 0.95 } : {}}
                 onClick={() => { if (unlocked && ch && !completed) setSelectedChallenge(ch); }}
                 disabled={!unlocked || completed}
-                className={`relative w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all cursor-pointer
-                  ${completed ? "bg-blood-red border-2 border-amber-900 shadow-md shadow-red-900/40"
-                    : unlocked ? "bg-amber-100 border-2 border-amber-900 shadow-[0_0_15px_rgba(180,83,9,0.4)] animate-glow"
-                    : "bg-transparent border-2 border-amber-900/30 border-dashed opacity-60 cursor-not-allowed"}`}>
+                className={`relative flex items-center justify-center transition-all w-16 h-16 md:w-20 md:h-20
+                  ${unlocked && !completed ? "cursor-pointer drop-shadow-[0_0_10px_rgba(180,83,9,0.3)] animate-glow" : !unlocked ? "opacity-60 cursor-not-allowed" : ""}`}>
+                
+                {/* The Island */}
+                <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full drop-shadow-sm" style={{ transform: `rotate(${idx * 45}deg)` }}>
+                  <path
+                    d="M50 5 C 70 2, 90 15, 95 35 C 98 55, 85 85, 65 95 C 40 100, 15 85, 5 65 C -2 45, 15 15, 35 10 C 40 8, 45 6, 50 5 Z"
+                    fill="#e0c48f"
+                    stroke="#713f12"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                  <path d="M 30 40 Q 40 30 50 45 T 70 35 M 40 65 Q 55 55 65 70" fill="none" stroke="#713f12" strokeWidth="1" strokeLinecap="round" opacity="0.4" />
+                </svg>
+
+                {/* The Red Cross or Lock/Unlock */}
                 {completed ? (
-                  <motion.div initial={{ scale: 3, rotate: -15, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}>
-                    <X className="w-6 h-6 md:w-7 md:h-7 text-white" strokeWidth={4} />
-                  </motion.div>
-                ) : unlocked ? <Unlock className="w-4 h-4 md:w-5 md:h-5 text-amber-900" />
-                  : <Lock className="w-4 h-4 md:w-5 md:h-5 text-amber-900/50" />}
+                  <motion.svg viewBox="0 0 100 100" className="absolute w-12 h-12 md:w-16 md:h-16 z-10" initial={{ pathLength: 0, opacity: 0, scale: 3 }} animate={{ pathLength: 1, opacity: 1, scale: 1 }} transition={{ duration: 0.5, type: "spring", stiffness: 200 }}>
+                    <path d="M 20 20 Q 50 45 80 80 M 80 20 Q 50 55 20 80" stroke="#991b1b" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" style={{ filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.5))" }} />
+                  </motion.svg>
+                ) : unlocked ? (
+                  <Unlock className="w-5 h-5 md:w-6 md:h-6 text-amber-900 z-10 drop-shadow-md" />
+                ) : (
+                  <Lock className="w-5 h-5 md:w-6 md:h-6 text-amber-900/50 z-10" />
+                )}
               </motion.button>
               <div className={`absolute whitespace-nowrap text-[10px] md:text-xs font-bold mt-1 left-1/2 -translate-x-1/2 ${idx % 2 === 0 ? "top-full" : "bottom-full mb-1"}`}>
                 <div className="flex items-center gap-1">
-                  <Icon className="w-3 h-3 text-amber-900" />
-                  <span className={completed ? "text-blood-red line-through" : unlocked ? "text-amber-900 font-extrabold" : "text-amber-900/60"}>
-                    {cid === 10 ? "☠️ Final" : `Ch.${cid}`}
+                  <span className={completed ? "text-red-900 line-through" : unlocked ? "text-amber-900 font-extrabold" : "text-amber-900/60"}>
+                    {cid === 10 ? "☠️ Final Island" : `Island ${cid}`}
                   </span>
                 </div>
               </div>
@@ -127,6 +141,7 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         <div className="absolute bottom-2 left-2 text-xs text-amber-900 font-[family-name:var(--font-pirate)]">🏝️ Port Royal</div>
         <div className="absolute top-2 right-16 text-xs text-amber-950 font-[family-name:var(--font-pirate)] flex items-center gap-1">
           <span>The Black Pearl</span><ChevronRight className="w-3 h-3" /><span>🏴‍☠️</span>
+        </div>
         </div>
       </div>
 
