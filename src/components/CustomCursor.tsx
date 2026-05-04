@@ -8,6 +8,7 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [clickRotation, setClickRotation] = useState(0);
 
   // Use motion values for better performance than state
   const mouseX = useMotionValue(-100);
@@ -60,14 +61,20 @@ export default function CustomCursor() {
     const handleMouseLeave = () => setIsVisible(false);
     const handleMouseEnter = () => setIsVisible(true);
 
+    const handleMouseDown = () => {
+      setClickRotation((prev) => prev + 360);
+    };
+
     window.addEventListener("mousemove", updateMousePosition);
     window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
     };
@@ -79,7 +86,7 @@ export default function CustomCursor() {
     <>
       {/* Outer trailing circle */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 rounded-full border border-gold-500 pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 w-10 h-10 rounded-full border border-white pointer-events-none z-[9999] mix-blend-difference"
         style={{
           x: springX,
           y: springY,
@@ -89,14 +96,14 @@ export default function CustomCursor() {
         }}
         animate={{
           scale: isHovering ? 1.5 : isText ? 0.8 : 1,
-          backgroundColor: isText ? "rgba(234, 179, 8, 0.4)" : "rgba(234, 179, 8, 0)",
-          borderWidth: isText ? "0px" : "1px",
+          backgroundColor: isText ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0)",
+          borderWidth: isText ? "0px" : "1.5px",
         }}
         transition={{ duration: 0.15 }}
       />
       {/* Inner dot / Anchor */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[10000] text-amber-900"
+        className="fixed top-0 left-0 pointer-events-none z-[10000] text-white mix-blend-difference"
         style={{
           x: dotSpringX,
           y: dotSpringY,
@@ -106,11 +113,14 @@ export default function CustomCursor() {
         }}
         animate={{
           scale: isText ? 0 : isHovering ? 1.2 : 1, // Shrink to nothing when over text
-          rotate: isHovering ? -15 : 0, // Slight tilt when hovering
+          rotate: (isHovering ? -15 : 0) + clickRotation, // Slight tilt when hovering + spin on click
         }}
-        transition={{ duration: 0.1 }}
+        transition={{ 
+          scale: { duration: 0.15 },
+          rotate: { type: "spring", stiffness: 150, damping: 12 }
+        }}
       >
-        <Anchor className="w-6 h-6 drop-shadow-[0_0_3px_rgba(245,230,200,0.8)]" strokeWidth={2.5} />
+        <Anchor className="w-6 h-6" strokeWidth={2.5} />
       </motion.div>
     </>
   );
