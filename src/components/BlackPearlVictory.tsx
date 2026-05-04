@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, Clock, Ship, Skull, Anchor } from "lucide-react";
+import { Trophy, Clock, Ship, Skull, Anchor, Sparkles } from "lucide-react";
 import { Team } from "@/lib/supabase";
 
 interface BlackPearlVictoryProps {
@@ -16,7 +16,7 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
   const rank = finishedTeams.findIndex((t) => t.id === team.id) + 1;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black overflow-hidden">
       {/* Animated particles */}
       {Array.from({ length: 30 }).map((_, i) => (
         <motion.div key={i} className="absolute w-1 h-1 bg-gold-400 rounded-full"
@@ -31,10 +31,53 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
       ))}
 
       <div className="relative z-10 text-center max-w-2xl mx-auto px-6">
-        {/* Ship reveal */}
-        <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 10, delay: 0.5 }} className="mb-8">
-          <div className="text-8xl md:text-9xl">🏴‍☠️</div>
+        {/* Sparkling Black Pearl reveal */}
+        <motion.div initial={{ scale: 0, y: 50 }} animate={{ scale: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.5 }} className="mb-10 flex justify-center relative">
+          
+          <div className="relative w-32 h-32 md:w-48 md:h-48 flex items-center justify-center">
+            {/* The Pearl */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "radial-gradient(circle at 30% 30%, #e5e7eb 0%, #9ca3af 10%, #374151 30%, #111827 60%, #030712 85%, #000000 100%)",
+                boxShadow: "inset -10px -10px 30px rgba(255,255,255,0.05), inset 10px 10px 20px rgba(255,255,255,0.1), 0 0 30px rgba(0,0,0,0.9)"
+              }}
+              animate={{ 
+                boxShadow: [
+                  "inset -10px -10px 30px rgba(255,255,255,0.05), inset 10px 10px 20px rgba(255,255,255,0.1), 0 0 30px rgba(0,0,0,0.9), 0 0 30px rgba(156,163,175,0.2)",
+                  "inset -10px -10px 30px rgba(255,255,255,0.05), inset 10px 10px 20px rgba(255,255,255,0.15), 0 0 40px rgba(0,0,0,1), 0 0 60px rgba(156,163,175,0.4)",
+                  "inset -10px -10px 30px rgba(255,255,255,0.05), inset 10px 10px 20px rgba(255,255,255,0.1), 0 0 30px rgba(0,0,0,0.9), 0 0 30px rgba(156,163,175,0.2)"
+                ]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            {/* Sparkles */}
+            {Array.from({ length: 8 }).map((_, i) => (
+              <motion.div
+                key={`sparkle-${i}`}
+                className="absolute text-white/90 drop-shadow-md"
+                style={{
+                  top: `${-10 + Math.random() * 120}%`,
+                  left: `${-10 + Math.random() * 120}%`,
+                }}
+                animate={{
+                  scale: [0, 1.2, 0],
+                  opacity: [0, 1, 0],
+                  rotate: [0, 90, 180]
+                }}
+                transition={{
+                  duration: 1.5 + Math.random() * 1.5,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                  ease: "easeInOut"
+                }}
+              >
+                <Sparkles size={16 + Math.random() * 24} strokeWidth={1.5} />
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Title */}
