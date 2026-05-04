@@ -7,6 +7,7 @@ import Link from "next/link";
 import Leaderboard from "@/components/Leaderboard";
 import TreasureMap from "@/components/TreasureMap";
 import BlackPearlVictory from "@/components/BlackPearlVictory";
+import PirateShip from "@/components/PirateShip";
 import { supabase, Team } from "@/lib/supabase";
 import { ClientChallenge } from "@/lib/challenges";
 
@@ -150,8 +151,14 @@ export default function Home() {
 
           {/* Logo / Title */}
           <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 150, damping: 12 }} className="mb-8">
-            <div className="text-7xl mb-4">🏴‍☠️</div>
+            transition={{ type: "spring", stiffness: 150, damping: 12 }} className="mb-8 flex flex-col items-center">
+            <motion.div 
+              className="w-24 h-24 mb-4"
+              animate={{ rotate: [-5, 5, -5], y: [0, -8, 0] }} 
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <PirateShip className="w-full h-full drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]" />
+            </motion.div>
             <h1 className="font-[family-name:var(--font-pirate)] text-4xl md:text-5xl gold-text mb-2">
               Pirates of the Caribbean
             </h1>
