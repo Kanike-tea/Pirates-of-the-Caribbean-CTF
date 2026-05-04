@@ -138,9 +138,11 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           );
         })}
 
-        <div className="absolute bottom-2 left-2 text-xs text-amber-900 font-[family-name:var(--font-pirate)]">🏝️ Port Royal</div>
-        <div className="absolute top-2 right-16 text-xs text-amber-950 font-[family-name:var(--font-pirate)] flex items-center gap-1">
-          <span>The Black Pearl</span><ChevronRight className="w-3 h-3" /><span>🏴‍☠️</span>
+        <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 text-lg md:text-2xl text-amber-950 font-[family-name:var(--font-pirate)] drop-shadow-[0_2px_2px_rgba(255,255,255,0.6)] flex items-center gap-1">
+          🏝️ <span>Port Royal</span>
+        </div>
+        <div className="absolute top-8 right-24 md:top-12 md:right-32 text-lg md:text-2xl text-amber-950 font-[family-name:var(--font-pirate)] drop-shadow-[0_2px_2px_rgba(255,255,255,0.6)] flex items-center gap-1 z-20">
+          <span>The Black Pearl</span><ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-amber-900" /><span>🏴‍☠️</span>
         </div>
         </div>
       </div>
