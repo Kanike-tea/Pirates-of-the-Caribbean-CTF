@@ -229,6 +229,8 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
+
+        <InstructionsModal isOpen={isInstructionsOpen} onClose={() => setIsInstructionsOpen(false)} />
       </div>
     );
   }
