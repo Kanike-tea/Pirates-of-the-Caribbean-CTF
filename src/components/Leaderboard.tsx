@@ -303,7 +303,7 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                 <th className="pb-3 pl-2 w-16">Rank</th>
                 <th className="pb-3">Crew Name</th>
                 <th className="pb-3 text-center">Score</th>
-                <th className="pb-3 text-right pr-2">Last Update</th>
+                <th className="pb-3 text-right pr-2">Duration Completed In</th>
               </tr>
             </thead>
             <tbody>
@@ -342,9 +342,18 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                       </div>
                     </td>
                     <td className="py-3 text-right pr-2 text-xs text-ocean-500">
-                      {team.finished_at ? (
-                        <span className="text-gold-500 flex items-center justify-end gap-1"><Clock className="w-3 h-3" /> {new Date(team.finished_at).toLocaleTimeString()}</span>
-                      ) : (
+                      {team.finished_at ? (() => {
+                        const ms = new Date(team.finished_at).getTime() - new Date(team.created_at).getTime();
+                        const totalSecs = Math.floor(ms / 1000);
+                        const h = Math.floor(totalSecs / 3600);
+                        const m = Math.floor((totalSecs % 3600) / 60);
+                        const s = totalSecs % 60;
+                        const parts = [];
+                        if (h > 0) parts.push(`${h}h`);
+                        parts.push(`${m}m`);
+                        parts.push(`${s}s`);
+                        return <span className="text-gold-500 flex items-center justify-end gap-1"><Clock className="w-3 h-3" /> {parts.join(' ')}</span>;
+                      })() : (
                         <span>En route...</span>
                       )}
                     </td>

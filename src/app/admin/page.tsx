@@ -155,13 +155,14 @@ export default function AdminPanel() {
                 <th className="p-4">Crew Name</th>
                 <th className="p-4 text-center">Progress</th>
                 <th className="p-4">Finished At</th>
+                <th className="p-4">Duration</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {teams.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-ocean-600 italic">No crews found in the database.</td>
+                  <td colSpan={5} className="p-8 text-center text-ocean-600 italic">No crews found in the database.</td>
                 </tr>
               ) : (
                 teams.map((team) => (
@@ -174,6 +175,20 @@ export default function AdminPanel() {
                     </td>
                     <td className="p-4 text-sm text-ocean-500">
                       {team.finished_at ? new Date(team.finished_at).toLocaleString() : "-"}
+                    </td>
+                    <td className="p-4 text-sm text-ocean-400 font-mono">
+                      {team.finished_at ? (() => {
+                        const ms = new Date(team.finished_at).getTime() - new Date(team.created_at).getTime();
+                        const totalSecs = Math.floor(ms / 1000);
+                        const h = Math.floor(totalSecs / 3600);
+                        const m = Math.floor((totalSecs % 3600) / 60);
+                        const s = totalSecs % 60;
+                        const parts: string[] = [];
+                        if (h > 0) parts.push(`${h}h`);
+                        parts.push(`${m}m`);
+                        parts.push(`${s}s`);
+                        return parts.join(' ');
+                      })() : <span className="text-ocean-700">—</span>}
                     </td>
                     <td className="p-4 text-right space-x-2">
                       <button 
