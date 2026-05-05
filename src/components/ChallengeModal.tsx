@@ -19,6 +19,39 @@ export default function ChallengeModal({ challenge, teamId, onClose, onSuccess }
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState("");
 
+  const [hint, setHint] = useState("");
+  const [loadingHint, setLoadingHint] = useState(false);
+
+  const fetchHint = async () => {
+    if (hint) {
+      setShowHint(!showHint);
+      return;
+    }
+    
+    if (!window.confirm("Are ye sure, matey? Opening this hint will cost ye 5 points from yer final score!")) return;
+
+    setLoadingHint(true);
+    setError("");
+    try {
+      const res = await fetch("/api/get-hint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamId, challengeId: challenge.id }),
+      });
+      const data = await res.json();
+      if (data.hint) {
+        setHint(data.hint);
+        setShowHint(true);
+      } else {
+        setError("❌ " + (data.error || "Failed to load hint"));
+      }
+    } catch {
+      setError("⚠️ Failed to reach the server. The seas are stormy!");
+    } finally {
+      setLoadingHint(false);
+    }
+  };
+
   const submitAnswer = async () => {
     if (!answer.trim()) return;
     setLoading(true);
@@ -96,15 +129,15 @@ export default function ChallengeModal({ challenge, teamId, onClose, onSuccess }
         </div>
 
         {/* Hint toggle */}
-        <button onClick={() => setShowHint(!showHint)}
-          className="flex items-center gap-2 text-xs text-ocean-400 hover:text-ocean-300 mb-4 transition-colors cursor-pointer">
-          {showHint ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-          {showHint ? "Hide Hint" : "Show Hint"}
+        <button onClick={fetchHint} disabled={loadingHint}
+          className="flex items-center gap-2 text-xs text-ocean-400 hover:text-ocean-300 mb-4 transition-colors cursor-pointer disabled:opacity-50">
+          {loadingHint ? <Loader2 className="w-3 h-3 animate-spin" /> : showHint ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+          {showHint ? "Hide Hint" : "Show Hint (Costs 5 Points)"}
         </button>
-        {showHint && (
+        {showHint && hint && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
             className="mb-4 p-3 rounded-lg bg-ocean-900/30 border border-ocean-700/30">
-            <p className="text-ocean-300 text-xs">💡 {challenge.hint}</p>
+            <p className="text-ocean-300 text-xs">💡 {hint}</p>
           </motion.div>
         )}
 

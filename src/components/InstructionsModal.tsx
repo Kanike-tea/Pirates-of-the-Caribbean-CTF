@@ -51,10 +51,11 @@ export default function InstructionsModal({ isOpen, onClose }: InstructionsModal
                   </p>
                   <ul className="text-left list-disc list-inside space-y-2 max-w-md mx-auto mt-4 opacity-90">
                     <li>Create or join a Crew on the main screen.</li>
-                    <li>Solve the challenge on the unlocked island to earn your flag.</li>
+                    <li>Solve the challenge on the unlocked island to earn your flag (10 points each).</li>
                     <li>All flags are in the format: <strong>FLAG&#123;treasure_name&#125;</strong>.</li>
                     <li>Submit the correct flag to stamp the island with a red &apos;X&apos;.</li>
-                    <li>Race rival crews on the <strong>Sea Race</strong> leaderboard.</li>
+                    <li>If ye get stuck, ye can ask for a hint — but beware, it costs 5 points!</li>
+                    <li>Race rival crews on the <strong>Sea Race</strong> leaderboard based on your score.</li>
                     <li>The first crew to conquer all 10 islands claims the legendary <strong>Black Pearl</strong>!</li>
                   </ul>
                   <p className="mt-8 text-xl font-[family-name:var(--font-pirate)]">

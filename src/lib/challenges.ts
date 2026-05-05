@@ -137,13 +137,29 @@ export const challenges: Challenge[] = [
   },
 ];
 
-/** Sanitized challenge data safe to send to the client (no flags) */
-export type ClientChallenge = Omit<Challenge, "flag">;
+/** Sanitized challenge data safe to send to the client (no flags, no hints) */
+export type ClientChallenge = Omit<Challenge, "flag" | "hint">;
 
 export function getClientChallenges(): ClientChallenge[] {
   return challenges.map((c) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { flag, ...rest } = c;
+    const { flag, hint, ...rest } = c;
     return rest;
   });
+}
+
+/** 
+ * Calculate score: +10 points per completed challenge (id: 1-100), 
+ * -5 points per hint used (represented by id + 100).
+ */
+export function calculateScore(completedChallenges: number[]): number {
+  let score = 0;
+  for (const id of completedChallenges || []) {
+    if (id >= 1 && id <= 100) {
+      score += 10;
+    } else if (id > 100 && id <= 200) {
+      score -= 5;
+    }
+  }
+  return score;
 }

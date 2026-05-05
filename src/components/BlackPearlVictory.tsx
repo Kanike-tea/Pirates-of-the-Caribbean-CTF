@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Trophy, Clock, Ship, Skull, Anchor, Sparkles } from "lucide-react";
 import { Team } from "@/lib/supabase";
+import { calculateScore } from "@/lib/challenges";
 
 interface BlackPearlVictoryProps {
   team: Team;
@@ -13,7 +14,12 @@ interface BlackPearlVictoryProps {
 export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryProps) {
   const finishedTeams = allTeams
     .filter((t) => t.finished_at)
-    .sort((a, b) => new Date(a.finished_at!).getTime() - new Date(b.finished_at!).getTime());
+    .sort((a, b) => {
+      const scoreA = calculateScore(a.completed_challenges);
+      const scoreB = calculateScore(b.completed_challenges);
+      if (scoreA !== scoreB) return scoreB - scoreA;
+      return new Date(a.finished_at!).getTime() - new Date(b.finished_at!).getTime();
+    });
   const rank = finishedTeams.findIndex((t) => t.id === team.id) + 1;
 
   // Pre-calculate random values to satisfy react-hooks/purity
@@ -139,9 +145,12 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
                   <span className="text-lg w-8">{idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}</span>
                   <Ship className="w-4 h-4 text-gold-500" />
                   <span className="text-parchment font-semibold text-sm">{t.name}</span>
-                  <span className="ml-auto text-ocean-300 text-xs flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {new Date(t.finished_at!).toLocaleTimeString()}
+                  <span className="ml-auto flex items-center gap-2">
+                    <span className="text-gold-400 font-bold text-xs">{calculateScore(t.completed_challenges)} pts</span>
+                    <span className="text-ocean-300 text-xs flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {new Date(t.finished_at!).toLocaleTimeString()}
+                    </span>
                   </span>
                 </motion.div>
               ))}

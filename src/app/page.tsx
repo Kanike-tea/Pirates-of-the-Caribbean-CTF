@@ -10,7 +10,7 @@ import BlackPearlVictory from "@/components/BlackPearlVictory";
 import PirateShip from "@/components/PirateShip";
 import InstructionsModal from "@/components/InstructionsModal";
 import { supabase, Team } from "@/lib/supabase";
-import { ClientChallenge } from "@/lib/challenges";
+import { ClientChallenge, calculateScore } from "@/lib/challenges";
 
 type View = "join" | "game";
 
@@ -45,7 +45,20 @@ export default function Home() {
         supabase.from("teams").select("*").eq("id", teamId).single()
       ]);
       
-      if (teamsData) setAllTeams(teamsData as Team[]);
+      if (teamsData) {
+        const sortedData = (teamsData as Team[]).sort((a, b) => {
+          const scoreA = calculateScore(a.completed_challenges);
+          const scoreB = calculateScore(b.completed_challenges);
+          if (scoreA !== scoreB) return scoreB - scoreA;
+          if (a.finished_at && b.finished_at) {
+            return new Date(a.finished_at).getTime() - new Date(b.finished_at).getTime();
+          }
+          if (a.finished_at) return -1;
+          if (b.finished_at) return 1;
+          return 0;
+        });
+        setAllTeams(sortedData);
+      }
       if (teamData) {
         setTeam(teamData as Team);
         if ((teamData as Team).progress >= 10) setShowVictory(true);
@@ -243,8 +256,11 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4 text-xs">
             <div className="flex items-center gap-2">
-              <span className="text-gold-500 font-mono">{team?.progress || 0}/10</span>
-              <div className="w-20 h-1.5 bg-pirate-navy rounded-full overflow-hidden">
+              <div className="flex flex-col text-right">
+                <span className="text-gold-500 font-mono font-bold text-sm">{team ? calculateScore(team.completed_challenges) : 0} pts</span>
+                <span className="text-[10px] text-ocean-400 font-mono leading-none">{team?.progress || 0}/10</span>
+              </div>
+              <div className="w-16 sm:w-20 h-1.5 bg-pirate-navy rounded-full overflow-hidden">
                 <motion.div className="h-full bg-gold-500 rounded-full"
                   animate={{ width: `${((team?.progress || 0) / 10) * 100}%` }}
                   transition={{ type: "spring", stiffness: 100 }} />

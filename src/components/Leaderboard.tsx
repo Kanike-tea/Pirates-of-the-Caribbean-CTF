@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Clock, Anchor } from "lucide-react";
 import { supabase, Team } from "@/lib/supabase";
+import { calculateScore } from "@/lib/challenges";
 import PirateShip from "./PirateShip";
 
 const SHIP_COLORS = [
@@ -52,7 +53,19 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
 
       if (!ignore) {
         if (!error && data) {
-          setTeams(data as Team[]);
+          const sortedData = (data as Team[]).sort((a, b) => {
+            const scoreA = calculateScore(a.completed_challenges);
+            const scoreB = calculateScore(b.completed_challenges);
+            if (scoreA !== scoreB) return scoreB - scoreA;
+            // Fallback to finished_at if scores are equal
+            if (a.finished_at && b.finished_at) {
+              return new Date(a.finished_at).getTime() - new Date(b.finished_at).getTime();
+            }
+            if (a.finished_at) return -1;
+            if (b.finished_at) return 1;
+            return 0;
+          });
+          setTeams(sortedData);
         }
         setLoading(false);
       }
@@ -252,14 +265,17 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                       </motion.div>
                   </div>
 
-                  {/* Progress counter */}
-                  <div className="flex-shrink-0 w-12 text-right">
+                  {/* Progress & Score */}
+                  <div className="flex-shrink-0 w-16 text-right flex flex-col">
                     <span
                       className={`text-xs font-mono ${
                         isFinished ? "text-gold-400" : "text-ocean-300"
                       }`}
                     >
                       {team.progress}/10
+                    </span>
+                    <span className="text-[10px] text-gold-500 font-bold">
+                      {calculateScore(team.completed_challenges)} pts
                     </span>
                   </div>
                 </motion.div>
@@ -286,7 +302,7 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
               <tr className="border-b border-gold-800/50 text-gold-500 text-sm font-semibold">
                 <th className="pb-3 pl-2 w-16">Rank</th>
                 <th className="pb-3">Crew Name</th>
-                <th className="pb-3 text-center">Progress</th>
+                <th className="pb-3 text-center">Score</th>
                 <th className="pb-3 text-right pr-2">Last Update</th>
               </tr>
             </thead>
@@ -316,9 +332,14 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
                       {isFinished && <span className="ml-2 text-xs">🏴‍☠️</span>}
                     </td>
                     <td className="py-3 text-center">
-                      <span className={`text-sm font-mono ${isFinished ? "text-gold-400" : "text-ocean-300"}`}>
-                        {team.progress}/10
-                      </span>
+                      <div className="flex flex-col items-center">
+                        <span className={`text-sm font-bold ${isFinished ? "text-gold-400" : "text-ocean-300"}`}>
+                          {calculateScore(team.completed_challenges)} pts
+                        </span>
+                        <span className="text-[10px] text-ocean-500 font-mono">
+                          {team.progress}/10
+                        </span>
+                      </div>
                     </td>
                     <td className="py-3 text-right pr-2 text-xs text-ocean-500">
                       {team.finished_at ? (
