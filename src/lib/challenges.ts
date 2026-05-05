@@ -141,5 +141,9 @@ export const challenges: Challenge[] = [
 export type ClientChallenge = Omit<Challenge, "flag">;
 
 export function getClientChallenges(): ClientChallenge[] {
-  return challenges.map(({ flag, ...rest }) => rest);
+  return challenges.map((c) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { flag, ...rest } = c;
+    return rest;
+  });
 }

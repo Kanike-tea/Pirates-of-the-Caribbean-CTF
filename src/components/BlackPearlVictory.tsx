@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import { Trophy, Clock, Ship, Skull, Anchor, Sparkles } from "lucide-react";
 import { Team } from "@/lib/supabase";
@@ -15,19 +16,40 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
     .sort((a, b) => new Date(a.finished_at!).getTime() - new Date(b.finished_at!).getTime());
   const rank = finishedTeams.findIndex((t) => t.id === team.id) + 1;
 
+  // Pre-calculate random values to satisfy react-hooks/purity
+  const [particles] = React.useState(() => {
+    return Array.from({ length: 30 }).map(() => ({
+      x: `${Math.random() * 100}vw`,
+      y: `${Math.random() * 100}vh`,
+      scale: Math.random() * 2 + 1,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+    }));
+  });
+
+  const [sparkles] = React.useState(() => {
+    return Array.from({ length: 8 }).map(() => ({
+      top: `${-10 + Math.random() * 120}%`,
+      left: `${-10 + Math.random() * 120}%`,
+      duration: 1.5 + Math.random() * 1.5,
+      delay: Math.random() * 2,
+      size: 16 + Math.random() * 24,
+    }));
+  });
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black overflow-hidden">
       {/* Animated particles */}
-      {Array.from({ length: 30 }).map((_, i) => (
+      {particles.map((p, i) => (
         <motion.div key={i} className="absolute w-1 h-1 bg-gold-400 rounded-full"
           initial={{ opacity: 0, x: "50vw", y: "50vh" }}
           animate={{
             opacity: [0, 1, 0],
-            x: `${Math.random() * 100}vw`,
-            y: `${Math.random() * 100}vh`,
-            scale: [0, Math.random() * 2 + 1, 0],
+            x: p.x,
+            y: p.y,
+            scale: [0, p.scale, 0],
           }}
-          transition={{ duration: Math.random() * 3 + 2, delay: Math.random() * 2, repeat: Infinity }} />
+          transition={{ duration: p.duration, delay: p.delay, repeat: Infinity }} />
       ))}
 
       <div className="relative z-10 text-center max-w-2xl mx-auto px-6">
@@ -54,13 +76,13 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
             />
             
             {/* Sparkles */}
-            {Array.from({ length: 8 }).map((_, i) => (
+            {sparkles.map((s, i) => (
               <motion.div
                 key={`sparkle-${i}`}
                 className="absolute text-white/90 drop-shadow-md"
                 style={{
-                  top: `${-10 + Math.random() * 120}%`,
-                  left: `${-10 + Math.random() * 120}%`,
+                  top: s.top,
+                  left: s.left,
                 }}
                 animate={{
                   scale: [0, 1.2, 0],
@@ -68,13 +90,13 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
                   rotate: [0, 90, 180]
                 }}
                 transition={{
-                  duration: 1.5 + Math.random() * 1.5,
+                  duration: s.duration,
                   repeat: Infinity,
-                  delay: Math.random() * 2,
+                  delay: s.delay,
                   ease: "easeInOut"
                 }}
               >
-                <Sparkles size={16 + Math.random() * 24} strokeWidth={1.5} />
+                <Sparkles size={s.size} strokeWidth={1.5} />
               </motion.div>
             ))}
           </div>

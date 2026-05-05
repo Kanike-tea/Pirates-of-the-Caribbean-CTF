@@ -51,8 +51,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Admin API error:", error);
-    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message || "Internal server error" }, { status: 500 });
   }
 }

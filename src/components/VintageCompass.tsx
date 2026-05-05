@@ -2,7 +2,7 @@
 
 import React from "react";
 
-interface VintageCompassProps extends React.SVGProps<SVGSVGElement> {}
+type VintageCompassProps = React.SVGProps<SVGSVGElement>;
 
 export default function VintageCompass(props: VintageCompassProps) {
   return (

@@ -38,7 +38,7 @@ export default function InstructionsModal({ isOpen, onClose }: InstructionsModal
                 <div className="mb-6 flex flex-col items-center mt-2">
                   <Scroll className="w-12 h-12 text-amber-900 mb-2 drop-shadow-md" />
                   <h2 className="font-[family-name:var(--font-pirate)] text-3xl md:text-4xl text-amber-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.5)]">
-                    Captain's Orders
+                    Captain&apos;s Orders
                   </h2>
                 </div>
 
@@ -53,7 +53,7 @@ export default function InstructionsModal({ isOpen, onClose }: InstructionsModal
                     <li>Create or join a Crew on the main screen.</li>
                     <li>Solve the challenge on the unlocked island to earn your flag.</li>
                     <li>All flags are in the format: <strong>FLAG&#123;treasure_name&#125;</strong>.</li>
-                    <li>Submit the correct flag to stamp the island with a red 'X'.</li>
+                    <li>Submit the correct flag to stamp the island with a red &apos;X&apos;.</li>
                     <li>Race rival crews on the <strong>Sea Race</strong> leaderboard.</li>
                     <li>The first crew to conquer all 10 islands claims the legendary <strong>Black Pearl</strong>!</li>
                   </ul>

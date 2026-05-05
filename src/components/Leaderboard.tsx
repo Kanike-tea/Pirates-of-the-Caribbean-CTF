@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Ship, Trophy, Clock, Anchor } from "lucide-react";
+import { Trophy, Clock, Anchor } from "lucide-react";
 import { supabase, Team } from "@/lib/supabase";
 import PirateShip from "./PirateShip";
 
@@ -40,21 +40,25 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchTeams = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("teams")
-      .select("*")
-      .order("progress", { ascending: false })
-      .order("finished_at", { ascending: true, nullsFirst: false });
-
-    if (!error && data) {
-      setTeams(data as Team[]);
-    }
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
-    fetchTeams();
+    let ignore = false;
+
+    async function loadTeams() {
+      const { data, error } = await supabase
+        .from("teams")
+        .select("*")
+        .order("progress", { ascending: false })
+        .order("finished_at", { ascending: true, nullsFirst: false });
+
+      if (!ignore) {
+        if (!error && data) {
+          setTeams(data as Team[]);
+        }
+        setLoading(false);
+      }
+    }
+
+    loadTeams();
 
     // Subscribe to real-time updates
     const channel = supabase
@@ -63,15 +67,16 @@ export default function Leaderboard({ currentTeamId }: LeaderboardProps) {
         "postgres_changes",
         { event: "*", schema: "public", table: "teams" },
         () => {
-          fetchTeams();
+          loadTeams();
         }
       )
       .subscribe();
 
     return () => {
+      ignore = true;
       supabase.removeChannel(channel);
     };
-  }, [fetchTeams]);
+  }, []);
 
   if (loading) {
     return (

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, X, Skull, Anchor, Compass, Lock, Unlock, ChevronRight, CloudLightning, Waves } from "lucide-react";
+import { Lock, Unlock, ChevronRight } from "lucide-react";
 import ChallengeModal from "./ChallengeModal";
 import { ClientChallenge } from "@/lib/challenges";
 import PirateShip from "./PirateShip";
@@ -21,8 +21,6 @@ const POS = [
   { x: 45, y: 35 }, { x: 55, y: 55 }, { x: 65, y: 30 }, { x: 75, y: 50 },
   { x: 85, y: 25 }, { x: 90, y: 10 },
 ];
-
-const ICONS = [Anchor, Compass, Skull, MapPin, Anchor, Compass, Skull, MapPin, Anchor, Skull];
 
 export default function TreasureMap({ challenges, completedChallenges, teamId, onChallengeComplete }: TreasureMapProps) {
   const [selectedChallenge, setSelectedChallenge] = useState<ClientChallenge | null>(null);
@@ -89,7 +87,6 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           const ch = challenges.find((c) => c.id === cid);
           const completed = done(cid);
           const unlocked = open(cid);
-          const Icon = ICONS[idx];
 
           return (
             <motion.div key={cid} className="absolute" style={{ left: `${pos.x}%`, top: `${pos.y}%`, transform: "translate(-50%, -50%)" }}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function StormySeasBackground() {
   const [lightning, setLightning] = useState(false);
@@ -22,7 +22,15 @@ export default function StormySeasBackground() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const drops = Array.from({ length: 80 });
+  const [drops] = React.useState(() => {
+    return Array.from({ length: 80 }).map((_, i) => ({
+      left: `${(i / 80) * 100}%`,
+      top: `${Math.random() * -50}%`,
+      height: `${Math.random() * 15 + 15}%`,
+      duration: Math.random() * 0.3 + 0.3,
+      delay: Math.random() * 2,
+    }));
+  });
 
   return (
     <div className="absolute inset-0 bg-transparent overflow-hidden pointer-events-none z-0 opacity-80 mix-blend-multiply">
@@ -85,21 +93,21 @@ export default function StormySeasBackground() {
 
       {/* Heavy Rain - slanted */}
       <div className="absolute inset-[-20%] z-0 overflow-hidden transform rotate-[15deg] pointer-events-none">
-        {drops.map((_, i) => (
+        {drops.map((drop, i) => (
           <motion.div
             key={i}
             className="absolute bg-gradient-to-b from-transparent via-[#713f12]/20 to-[#451a03]/30 w-[1px]"
             style={{
-              left: `${(i / drops.length) * 100}%`,
-              top: `${Math.random() * -50}%`,
-              height: `${Math.random() * 15 + 15}%`,
+              left: drop.left,
+              top: drop.top,
+              height: drop.height,
             }}
             animate={{ y: ["0vh", "150vh"] }}
             transition={{
-              duration: Math.random() * 0.3 + 0.3,
+              duration: drop.duration,
               repeat: Infinity,
               ease: "linear",
-              delay: Math.random() * 2
+              delay: drop.delay
             }}
           />
         ))}

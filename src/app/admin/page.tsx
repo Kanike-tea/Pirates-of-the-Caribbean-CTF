@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase, Team } from "@/lib/supabase";
 import { Trash2, RotateCcw, AlertTriangle, Skull, ShieldAlert } from "lucide-react";
 
@@ -11,21 +11,30 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchTeams();
-      const channel = supabase
-        .channel("admin-teams")
-        .on("postgres_changes", { event: "*", schema: "public", table: "teams" }, () => fetchTeams())
-        .subscribe();
-      return () => { supabase.removeChannel(channel); };
-    }
-  }, [isAuthenticated]);
-
-  const fetchTeams = async () => {
+  const fetchTeams = useCallback(async () => {
     const { data } = await supabase.from("teams").select("*").order("progress", { ascending: false });
     if (data) setTeams(data as Team[]);
-  };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    const loadTeams = async () => {
+      const { data } = await supabase.from("teams").select("*").order("progress", { ascending: false });
+      if (!ignore && data) setTeams(data as Team[]);
+    };
+
+    if (isAuthenticated) {
+      loadTeams();
+      const channel = supabase
+        .channel("admin-teams")
+        .on("postgres_changes", { event: "*", schema: "public", table: "teams" }, () => loadTeams())
+        .subscribe();
+      return () => { 
+        ignore = true;
+        supabase.removeChannel(channel); 
+      };
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,8 +71,8 @@ export default function AdminPanel() {
       }
       
       await fetchTeams();
-    } catch (err: any) {
-      setError(err.message || "Failed to perform action");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Failed to perform action");
     } finally {
       setLoading(false);
     }
@@ -76,8 +85,8 @@ export default function AdminPanel() {
           <div className="flex justify-center mb-6 text-blood-red">
             <ShieldAlert className="w-16 h-16" />
           </div>
-          <h1 className="font-[family-name:var(--font-pirate)] text-4xl text-center text-blood-red mb-2">Captain's Quarters</h1>
-          <p className="text-center text-parchment-dark text-sm mb-8">Restricted Access. Enter the captain's passphrase.</p>
+          <h1 className="font-[family-name:var(--font-pirate)] text-4xl text-center text-blood-red mb-2">Captain&apos;s Quarters</h1>
+          <p className="text-center text-parchment-dark text-sm mb-8">Restricted Access. Enter the captain&apos;s passphrase.</p>
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div>

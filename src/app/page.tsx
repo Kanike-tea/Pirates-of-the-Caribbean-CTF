@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skull, Anchor, Ship, ShieldAlert } from "lucide-react";
 import Link from "next/link";
@@ -35,41 +35,34 @@ export default function Home() {
       .catch(() => {});
   }, []);
 
-  // Fetch teams for leaderboard
-  const fetchTeams = useCallback(async () => {
-    const { data } = await supabase
-      .from("teams")
-      .select("*")
-      .order("progress", { ascending: false })
-      .order("finished_at", { ascending: true, nullsFirst: false });
-    if (data) setAllTeams(data as Team[]);
-  }, []);
-
-  // Fetch current team data
-  const fetchTeam = useCallback(async (id: string) => {
-    const { data } = await supabase.from("teams").select("*").eq("id", id).single();
-    if (data) {
-      setTeam(data as Team);
-      if ((data as Team).progress >= 10) setShowVictory(true);
-    }
-  }, []);
-
   // Real-time subscription
   useEffect(() => {
     if (!teamId) return;
-    fetchTeams();
-    fetchTeam(teamId);
+
+    const loadData = async () => {
+      const [{ data: teamsData }, { data: teamData }] = await Promise.all([
+        supabase.from("teams").select("*").order("progress", { ascending: false }).order("finished_at", { ascending: true, nullsFirst: false }),
+        supabase.from("teams").select("*").eq("id", teamId).single()
+      ]);
+      
+      if (teamsData) setAllTeams(teamsData as Team[]);
+      if (teamData) {
+        setTeam(teamData as Team);
+        if ((teamData as Team).progress >= 10) setShowVictory(true);
+      }
+    };
+
+    loadData();
 
     const channel = supabase
       .channel("game-updates")
       .on("postgres_changes", { event: "*", schema: "public", table: "teams" }, () => {
-        fetchTeams();
-        fetchTeam(teamId);
+        loadData();
       })
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
-  }, [teamId, fetchTeams, fetchTeam]);
+  }, [teamId]);
 
   // Join / Create team
   const handleJoin = async () => {
@@ -154,7 +147,7 @@ export default function Home() {
           title="Captain's Quarters"
         >
           <ShieldAlert className="w-5 h-5" />
-          <span className="hidden sm:inline">Captain's Quarters</span>
+          <span className="hidden sm:inline">Captain&apos;s Quarters</span>
         </Link>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md text-center">
