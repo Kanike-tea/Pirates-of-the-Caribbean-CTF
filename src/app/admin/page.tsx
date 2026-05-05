@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { supabase, Team } from "@/lib/supabase";
-import { Trash2, RotateCcw, AlertTriangle, Skull, ShieldAlert } from "lucide-react";
+import { Trash2, RotateCcw, AlertTriangle, Skull, ShieldAlert, Trophy } from "lucide-react";
+import { calculateScore } from "@/lib/challenges";
 
 export default function AdminPanel() {
   const [password, setPassword] = useState("");
@@ -11,16 +12,32 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const sortTeams = (data: Team[]) =>
+    [...data].sort((a, b) => {
+      const scoreA = calculateScore(a.completed_challenges);
+      const scoreB = calculateScore(b.completed_challenges);
+      if (scoreA !== scoreB) return scoreB - scoreA;
+      // Both finished → fastest duration wins
+      if (a.finished_at && b.finished_at) {
+        const durA = new Date(a.finished_at).getTime() - new Date(a.started_at ?? a.created_at).getTime();
+        const durB = new Date(b.finished_at).getTime() - new Date(b.started_at ?? b.created_at).getTime();
+        return durA - durB;
+      }
+      if (a.finished_at) return -1;
+      if (b.finished_at) return 1;
+      return 0;
+    });
+
   const fetchTeams = useCallback(async () => {
-    const { data } = await supabase.from("teams").select("*").order("progress", { ascending: false });
-    if (data) setTeams(data as Team[]);
+    const { data } = await supabase.from("teams").select("*");
+    if (data) setTeams(sortTeams(data as Team[]));
   }, []);
 
   useEffect(() => {
     let ignore = false;
     const loadTeams = async () => {
-      const { data } = await supabase.from("teams").select("*").order("progress", { ascending: false });
-      if (!ignore && data) setTeams(data as Team[]);
+      const { data } = await supabase.from("teams").select("*");
+      if (!ignore && data) setTeams(sortTeams(data as Team[]));
     };
 
     if (isAuthenticated) {
@@ -152,7 +169,9 @@ export default function AdminPanel() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-pirate-navy/50 border-b border-ocean-800/50 text-gold-500 text-sm">
+                <th className="p-4 w-14 text-center">Rank</th>
                 <th className="p-4">Crew Name</th>
+                <th className="p-4 text-center">Score</th>
                 <th className="p-4 text-center">Progress</th>
                 <th className="p-4">Finished At</th>
                 <th className="p-4">Duration</th>
@@ -162,12 +181,29 @@ export default function AdminPanel() {
             <tbody>
               {teams.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-ocean-600 italic">No crews found in the database.</td>
+                  <td colSpan={7} className="p-8 text-center text-ocean-600 italic">No crews found in the database.</td>
                 </tr>
               ) : (
-                teams.map((team) => (
-                  <tr key={team.id} className="border-b border-ocean-900/30 hover:bg-white/5 transition-colors">
-                    <td className="p-4 font-semibold text-parchment">{team.name}</td>
+                teams.map((team, idx) => {
+                  const isTop = idx === 0 && team.finished_at;
+                  const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : null;
+                  return (
+                  <tr key={team.id} className={`border-b border-ocean-900/30 transition-colors ${isTop ? "bg-gold-900/10 hover:bg-gold-900/20" : "hover:bg-white/5"}`}>
+                    <td className="p-4 text-center">
+                      {medal
+                        ? <span className="text-lg">{medal}</span>
+                        : <span className="text-xs text-ocean-600 font-bold">#{idx + 1}</span>
+                      }
+                    </td>
+                    <td className="p-4 font-semibold">
+                      <span className={isTop ? "text-gold-300" : "text-parchment"}>{team.name}</span>
+                      {team.finished_at && <span className="ml-2 text-xs">🏴‍☠️</span>}
+                    </td>
+                    <td className="p-4 text-center">
+                      <span className={`text-sm font-bold ${team.finished_at ? "text-gold-400" : "text-ocean-300"}`}>
+                        {calculateScore(team.completed_challenges)} pts
+                      </span>
+                    </td>
                     <td className="p-4 text-center">
                       <span className="inline-block px-3 py-1 bg-ocean-900/50 rounded-full text-ocean-300 font-mono text-sm">
                         {team.progress} / 10
@@ -210,7 +246,8 @@ export default function AdminPanel() {
                       </button>
                     </td>
                   </tr>
-                ))
+                  );
+                })
               )}
             </tbody>
           </table>
