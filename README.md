@@ -4,15 +4,15 @@ Ahoy, matey! Welcome to the **Pirates of the Caribbean CTF Platform**, a highly 
 
 Players join "Crews" and race across an ancient, worn-out treasure map to solve challenges, capture flags, and ultimately claim the legendary Black Pearl.
 
-## ✨ Features
+## Features
 
-- 🗺️ **Interactive Treasure Map:** A dynamic, heavily-textured, ripped-edge parchment map. Challenges are represented by hand-drawn islands (complete with palm trees!) that mark themselves with a red "X" as your crew conquers them.
-- ⚓ **Immersive UI/UX:** Features a custom animated anchor cursor that reacts to clicks and background colors, a rotating vintage astrolabe compass, and stormy sea animations.
+- **Interactive Treasure Map:** A dynamic, heavily-textured, ripped-edge parchment map. Challenges are represented by hand-drawn islands (complete with palm trees!) that mark themselves with a red "X" as your crew conquers them.
+- **Immersive UI/UX:** Features a custom animated anchor cursor that reacts to clicks and background colours, a rotating vintage astrolabe compass, and stormy sea animations.
 - 🌊 **Live Sea Race Leaderboard:** A real-time leaderboard where team progress bars are filled with animated, flowing ocean waves. 
-- 👑 **Captain's Quarters (Admin Portal):** A hidden, secure dashboard for admins to oversee the race, track team progress, view detailed statistics, and manage flags.
-- 🏴‍☠️ **The Black Pearl Victory Screen:** An animated, particle-filled celebration screen featuring a beautifully styled, glowing Black Pearl that awaits the first crew to conquer all challenges.
+- **Captain's Quarters (Admin Portal):** A hidden, secure dashboard for admins to oversee the race, track team progress, view detailed statistics, and manage flags.
+- **The Black Pearl Victory Screen:** An animated, particle-filled celebration screen featuring a beautifully styled, glowing Black Pearl that awaits the first crew to conquer all challenges.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework:** Next.js (React)
 - **Styling:** Tailwind CSS
@@ -20,7 +20,7 @@ Players join "Crews" and race across an ancient, worn-out treasure map to solve 
 - **Backend & Database:** Supabase (PostgreSQL, Realtime Subscriptions)
 - **Icons:** Lucide React
 
-## 🚀 Getting Started
+## Getting Started
 
 To run this platform locally and set sail on your own machine:
 
@@ -50,7 +50,7 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 🗺️ Project Structure
+## Project Structure
 
 - `src/app/page.tsx`: The main entry point featuring the "Join Yer Crew" screen and handling the layout for the game tabs.
 - `src/app/admin/page.tsx`: The Captain's Quarters (Admin Portal).
@@ -61,4 +61,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `src/lib/supabase.ts`: Database client and type definitions.
 
 ---
-*May the winds be ever in your favor, and may your crew claim the Black Pearl!*
+*May the winds be ever in your favour, and may your crew claim the Black Pearl!*
