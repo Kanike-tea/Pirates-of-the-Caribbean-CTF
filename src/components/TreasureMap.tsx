@@ -59,8 +59,8 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
 
             return (
               <motion.path key={`p-${idx}`} d={pathData} fill="none" vectorEffect="non-scaling-stroke"
-                stroke={c ? "#713f12" : done(idx) || open(idx + 1) ? "rgba(113,63,18,0.5)" : "rgba(113,63,18,0.15)"}
-                strokeWidth={c ? "2.5" : "1.5"} strokeDasharray={c ? "none" : "3 3"}
+                stroke={c ? "#451a03" : done(idx) || open(idx + 1) ? "rgba(69, 26, 3, 0.8)" : "rgba(69, 26, 3, 0.4)"}
+                strokeWidth={c ? "3.5" : "2"} strokeDasharray={c ? "none" : "3 3"}
                 initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1, delay: idx * 0.15 }} />
             );
           })}
