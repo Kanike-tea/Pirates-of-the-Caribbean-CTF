@@ -22,7 +22,10 @@ export default function CustomCursor() {
   const dotSpringX = useSpring(mouseX, { stiffness: 700, damping: 28, mass: 0.1 });
   const dotSpringY = useSpring(mouseY, { stiffness: 700, damping: 28, mass: 0.1 });
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const updateMousePosition = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -80,7 +83,7 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (typeof window === "undefined") return null;
+  if (!mounted) return null;
 
   return (
     <>

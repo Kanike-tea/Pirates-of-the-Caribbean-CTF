@@ -37,9 +37,9 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
 
       <div className="ripped-border-shadow">
         <div className="relative w-full overflow-hidden ripped-border shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
-          <div className="absolute top-4 right-4 opacity-30 z-10 pointer-events-none drop-shadow-md">
+          <div className="absolute top-4 right-4 opacity-100 z-10 pointer-events-none">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
-            <VintageCompass className="w-24 h-24 text-amber-900 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
+            <VintageCompass className="w-32 h-32 text-black drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]" />
           </motion.div>
         </div>
 
@@ -130,14 +130,14 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
                     <path d="M 20 20 Q 50 45 80 80 M 80 20 Q 50 55 20 80" stroke="#991b1b" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round" style={{ filter: "drop-shadow(2px 2px 2px rgba(0,0,0,0.5))" }} />
                   </motion.svg>
                 ) : unlocked ? (
-                  <Unlock className="w-5 h-5 md:w-6 md:h-6 text-amber-900 z-10 drop-shadow-md" />
+                  <Unlock className="w-5 h-5 md:w-6 md:h-6 text-[#451a03] z-10 drop-shadow-md" />
                 ) : (
-                  <Lock className="w-5 h-5 md:w-6 md:h-6 text-amber-900/50 z-10" />
+                  <Lock className="w-5 h-5 md:w-6 md:h-6 text-[#451a03]/50 z-10" />
                 )}
               </motion.button>
               <div className={`absolute whitespace-nowrap text-[10px] md:text-xs font-bold mt-1 left-1/2 -translate-x-1/2 ${idx % 2 === 0 ? "top-full" : "bottom-full mb-1"}`}>
                 <div className="flex items-center gap-1">
-                  <span className={completed ? "text-red-900 line-through" : unlocked ? "text-amber-900 font-extrabold" : "text-amber-900/60"}>
+                  <span className={completed ? "text-red-950 line-through" : unlocked ? "text-[#451a03] font-extrabold" : "text-[#451a03]/80"}>
                     {cid === 10 ? "☠️ Final Island" : `Island ${cid}`}
                   </span>
                 </div>
@@ -146,11 +146,11 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
           );
         })}
 
-        <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 text-xs md:text-sm font-extrabold text-amber-900 flex items-center gap-1">
+        <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 text-xs md:text-sm font-extrabold text-[#451a03] flex items-center gap-1">
           🏝️ <span>Port Royal</span>
         </div>
-        <div className="absolute top-8 right-24 md:top-12 md:right-32 text-xs md:text-sm font-extrabold text-amber-900 flex items-center gap-1 z-20">
-          <span>The Black Pearl</span><ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-amber-900" /><span>🏴‍☠️</span>
+        <div className="absolute top-8 right-24 md:top-12 md:right-32 text-xs md:text-sm font-extrabold text-[#451a03] flex items-center gap-1 z-20">
+          <span>The Black Pearl</span><ChevronRight className="w-3 h-3 md:w-4 md:h-4 text-[#451a03]" /><span>🏴‍☠️</span>
         </div>
         </div>
       </div>
