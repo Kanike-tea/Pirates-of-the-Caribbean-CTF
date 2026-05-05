@@ -129,7 +129,7 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen p-6 md:p-12 max-w-5xl mx-auto">
+    <div className="min-h-screen p-6 md:p-12 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-pirate-black/40 p-6 rounded-2xl border border-gold-800/30">
         <div>
           <h1 className="font-[family-name:var(--font-pirate)] text-4xl md:text-5xl text-gold-400 mb-2 flex items-center gap-3">
