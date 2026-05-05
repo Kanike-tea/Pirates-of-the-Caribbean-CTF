@@ -124,7 +124,8 @@ export async function POST(request: NextRequest) {
 
     // Update team progress
     const newCompleted = [...completedChallenges, challengeId];
-    const newProgress = newCompleted.length;
+    const actualCompleted = newCompleted.filter(id => id >= 1 && id <= 100);
+    const newProgress = actualCompleted.length;
     const finishedAt = newProgress >= 10 ? new Date().toISOString() : null;
 
     const { error: updateError } = await supabase

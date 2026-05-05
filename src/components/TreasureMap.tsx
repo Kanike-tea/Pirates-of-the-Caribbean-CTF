@@ -24,8 +24,9 @@ const POS = [
 
 export default function TreasureMap({ challenges, completedChallenges, teamId, onChallengeComplete }: TreasureMapProps) {
   const [selectedChallenge, setSelectedChallenge] = useState<ClientChallenge | null>(null);
-  const done = (id: number) => completedChallenges.includes(id);
-  const open = (id: number) => id === 1 || completedChallenges.includes(id - 1);
+  const actualCompleted = completedChallenges.filter(id => id >= 1 && id <= 100);
+  const done = (id: number) => actualCompleted.includes(id);
+  const open = (id: number) => id === 1 || actualCompleted.includes(id - 1);
 
   return (
     <div className="w-full">
@@ -65,7 +66,7 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
         </svg>
 
         {(() => {
-          const currentPosIdx = Math.min(completedChallenges.length, 9);
+          const currentPosIdx = Math.min(actualCompleted.length, 9);
           const currentPos = POS[currentPosIdx];
           return (
             <motion.div
@@ -156,12 +157,12 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
 
       <div className="mt-4 px-2">
         <div className="flex justify-between text-xs text-gold-600 mb-1">
-          <span>Treasures claimed: {completedChallenges.length}/10</span>
-          <span>{Math.round((completedChallenges.length / 10) * 100)}%</span>
+          <span>Treasures claimed: {actualCompleted.length}/10</span>
+          <span>{Math.round((actualCompleted.length / 10) * 100)}%</span>
         </div>
         <div className="h-2 bg-pirate-navy rounded-full overflow-hidden border border-ocean-800/50">
           <motion.div className="h-full bg-gradient-to-r from-gold-600 via-treasure-gold to-gold-400 rounded-full"
-            initial={{ width: "0%" }} animate={{ width: `${(completedChallenges.length / 10) * 100}%` }}
+            initial={{ width: "0%" }} animate={{ width: `${(actualCompleted.length / 10) * 100}%` }}
             transition={{ type: "spring", stiffness: 100, damping: 20 }} />
         </div>
       </div>
