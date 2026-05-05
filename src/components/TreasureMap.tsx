@@ -37,9 +37,9 @@ export default function TreasureMap({ challenges, completedChallenges, teamId, o
 
       <div className="ripped-border-shadow">
         <div className="relative w-full overflow-hidden ripped-border shadow-[inset_0_0_60px_rgba(113,63,18,0.6)] map-parchment" style={{ aspectRatio: "16/9" }}>
-          <div className="absolute top-4 right-4 opacity-100 z-10 pointer-events-none">
+          <div className="absolute bottom-4 right-4 opacity-70 z-0 pointer-events-none">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
-            <VintageCompass className="w-32 h-32 text-black drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]" />
+            <VintageCompass className="w-40 h-40 text-[#451a03] drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" />
           </motion.div>
         </div>
 
