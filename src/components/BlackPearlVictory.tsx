@@ -149,7 +149,19 @@ export default function BlackPearlVictory({ team, allTeams }: BlackPearlVictoryP
                     <span className="text-gold-400 font-bold text-xs">{calculateScore(t.completed_challenges)} pts</span>
                     <span className="text-ocean-300 text-xs flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      {new Date(t.finished_at!).toLocaleTimeString()}
+                      {(() => {
+                        const start = t.started_at ?? t.created_at;
+                        const ms = new Date(t.finished_at!).getTime() - new Date(start).getTime();
+                        const totalSecs = Math.floor(ms / 1000);
+                        const h = Math.floor(totalSecs / 3600);
+                        const m = Math.floor((totalSecs % 3600) / 60);
+                        const s = totalSecs % 60;
+                        const parts: string[] = [];
+                        if (h > 0) parts.push(`${h}h`);
+                        parts.push(`${m}m`);
+                        parts.push(`${s}s`);
+                        return parts.join(' ');
+                      })()}
                     </span>
                   </span>
                 </motion.div>

@@ -127,6 +127,9 @@ export async function POST(request: NextRequest) {
     const actualCompleted = newCompleted.filter(id => id >= 1 && id <= 100);
     const newProgress = actualCompleted.length;
     const finishedAt = newProgress >= 10 ? new Date().toISOString() : null;
+    // Record when the team solved their very first challenge
+    const isFirstSolve = completedChallenges.length === 0;
+    const startedAt = isFirstSolve ? new Date().toISOString() : undefined;
 
     const { error: updateError } = await supabase
       .from("teams")
@@ -134,6 +137,7 @@ export async function POST(request: NextRequest) {
         completed_challenges: newCompleted,
         progress: newProgress,
         ...(finishedAt ? { finished_at: finishedAt } : {}),
+        ...(startedAt ? { started_at: startedAt } : {}),
       })
       .eq("id", teamId);
 

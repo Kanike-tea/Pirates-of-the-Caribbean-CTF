@@ -177,8 +177,8 @@ export default function AdminPanel() {
                       {team.finished_at ? new Date(team.finished_at).toLocaleString() : "-"}
                     </td>
                     <td className="p-4 text-sm text-ocean-400 font-mono">
-                      {team.finished_at ? (() => {
-                        const ms = new Date(team.finished_at).getTime() - new Date(team.created_at).getTime();
+                      {team.finished_at && team.started_at ? (() => {
+                        const ms = new Date(team.finished_at).getTime() - new Date(team.started_at).getTime();
                         const totalSecs = Math.floor(ms / 1000);
                         const h = Math.floor(totalSecs / 3600);
                         const m = Math.floor((totalSecs % 3600) / 60);

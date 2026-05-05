@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       if (!teamId) return NextResponse.json({ error: "Missing teamId" }, { status: 400 });
       const { error } = await supabaseAdmin
         .from("teams")
-        .update({ progress: 0, completed_challenges: [], finished_at: null })
+        .update({ progress: 0, completed_challenges: [], finished_at: null, started_at: null })
         .eq("id", teamId);
       if (error) throw error;
       return NextResponse.json({ success: true, message: "Team reset successfully." });
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     if (action === "reset_all") {
       const { error } = await supabaseAdmin
         .from("teams")
-        .update({ progress: 0, completed_challenges: [], finished_at: null })
+        .update({ progress: 0, completed_challenges: [], finished_at: null, started_at: null })
         .not("id", "is", null);
       if (error) throw error;
       return NextResponse.json({ success: true, message: "All teams reset successfully." });

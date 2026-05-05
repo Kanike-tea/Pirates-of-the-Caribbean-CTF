@@ -11,5 +11,6 @@ export interface Team {
   progress: number; // 0-10, each correct answer = +1
   completed_challenges: number[]; // array of challenge IDs
   finished_at: string | null; // ISO timestamp when progress === 10
+  started_at: string | null;  // ISO timestamp when the team solves their first challenge
   created_at: string;
 }
