@@ -67,6 +67,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: "Game stopped successfully." });
     }
 
+    if (action === "verify_password") {
+      return NextResponse.json({ success: true });
+    }
+
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   } catch (error: unknown) {
     console.error("Admin API error:", error);

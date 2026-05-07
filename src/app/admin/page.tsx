@@ -53,11 +53,29 @@ export default function AdminPanel() {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password) {
+    if (!password) return;
+    
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "verify_password", adminPassword: password })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error);
+      }
+      
       setIsAuthenticated(true);
       setError("");
+    } catch (err: unknown) {
+      setError((err as Error).message || "Failed to verify password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,9 +138,10 @@ export default function AdminPanel() {
             {error && <p className="text-blood-red text-sm text-center">{error}</p>}
             <button 
               type="submit"
-              className="w-full bg-blood-red hover:bg-red-800 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer"
+              disabled={loading}
+              className="w-full bg-blood-red hover:bg-red-800 text-white font-bold py-3 rounded-xl transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Unlock Dashboard
+              {loading ? "Verifying..." : "Unlock Dashboard"}
             </button>
           </form>
         </div>
