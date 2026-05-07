@@ -26,6 +26,7 @@ export default function Home() {
   const [showVictory, setShowVictory] = useState(false);
   const [activeTab, setActiveTab] = useState<"map" | "race">("map");
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
 
   // Fetch challenges on mount
   useEffect(() => {
@@ -46,7 +47,9 @@ export default function Home() {
       ]);
       
       if (teamsData) {
-        const sortedData = (teamsData as Team[]).sort((a, b) => {
+        const sortedData = (teamsData as Team[])
+          .filter(t => t.name !== "__GAME_STATE__")
+          .sort((a, b) => {
           const scoreA = calculateScore(a.completed_challenges);
           const scoreB = calculateScore(b.completed_challenges);
           if (scoreA !== scoreB) return scoreB - scoreA;
@@ -58,6 +61,12 @@ export default function Home() {
           return 0;
         });
         setAllTeams(sortedData);
+        const gameStateTeam = (teamsData as Team[]).find(t => t.name === "__GAME_STATE__");
+        if (gameStateTeam) {
+          setIsGameStarted(gameStateTeam.progress === 1);
+        } else {
+          setIsGameStarted(false);
+        }
       }
       if (teamData) {
         setTeam(teamData as Team);
@@ -242,6 +251,49 @@ export default function Home() {
   }
 
   // Game Screen
+  if (!isGameStarted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 relative">
+        <button 
+          onClick={() => setIsInstructionsOpen(true)}
+          className="absolute top-6 left-6 flex items-center gap-2 text-ocean-400 hover:text-ocean-200 transition-colors cursor-pointer text-sm font-semibold bg-ocean-900/30 px-3 py-2 rounded-lg border border-ocean-500/30 hover:bg-ocean-800/40"
+          title="Captain's Orders"
+        >
+          <span className="text-xl">📜</span>
+          <span className="hidden sm:inline">Instructions</span>
+        </button>
+        <Link 
+          href="/admin" 
+          className="absolute top-6 right-6 flex items-center gap-2 text-blood-red/70 hover:text-blood-red transition-colors cursor-pointer text-sm font-semibold bg-blood-red/10 px-3 py-2 rounded-lg border border-blood-red/20 hover:bg-blood-red/20"
+          title="Captain's Quarters"
+        >
+          <ShieldAlert className="w-5 h-5" />
+          <span className="hidden sm:inline">Captain&apos;s Quarters</span>
+        </Link>
+        <div className="w-full max-w-md text-center p-8 rounded-2xl bg-pirate-black/80 border-2 border-gold-800/50 shadow-2xl shadow-gold-900/20 backdrop-blur-md">
+          <motion.div 
+            animate={{ rotate: [-5, 5, -5] }} 
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="flex justify-center mb-6"
+          >
+            <Anchor className="w-16 h-16 text-gold-600" />
+          </motion.div>
+          <h2 className="font-[family-name:var(--font-pirate)] text-3xl text-gold-400 mb-4">
+            Hold Fast, Crew!
+          </h2>
+          <p className="text-parchment/80 mb-6">
+            The hunt has not yet begun. Drop anchor and wait for the captain to give the signal.
+          </p>
+          <div className="flex items-center justify-center gap-2 text-ocean-400 text-sm animate-pulse">
+            <span className="w-2 h-2 rounded-full bg-ocean-400" />
+            Waiting for Host...
+          </div>
+        </div>
+        <InstructionsModal isOpen={isInstructionsOpen} onClose={() => setIsInstructionsOpen(false)} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       {/* Header */}

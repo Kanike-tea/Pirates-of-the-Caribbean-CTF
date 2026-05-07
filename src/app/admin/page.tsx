@@ -66,6 +66,8 @@ export default function AdminPanel() {
       action === "delete_all" ? "⚠️ WARNING: Are you sure you want to DELETE ALL TEAMS? This cannot be undone!" :
       action === "reset_all" ? "⚠️ WARNING: Are you sure you want to RESET ALL PROGRESS?" :
       action === "delete_team" ? "Are you sure you want to delete this team?" :
+      action === "start_game" ? "Are you sure you want to START the game?" :
+      action === "stop_game" ? "Are you sure you want to STOP the game?" :
       "Are you sure you want to reset this team's progress?";
       
     if (!window.confirm(confirmMsg)) return;
@@ -128,6 +130,10 @@ export default function AdminPanel() {
     );
   }
 
+  const gameStateTeam = teams.find(t => t.name === "__GAME_STATE__");
+  const isGameStarted = gameStateTeam?.progress === 1;
+  const displayTeams = teams.filter(t => t.name !== "__GAME_STATE__");
+
   return (
     <div className="min-h-screen p-6 md:p-12 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-pirate-black/40 p-6 rounded-2xl border border-gold-800/30">
@@ -140,6 +146,13 @@ export default function AdminPanel() {
         </div>
         
         <div className="flex flex-col gap-3">
+          <button 
+            onClick={() => handleAction(isGameStarted ? "stop_game" : "start_game")}
+            disabled={loading}
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm transition-colors cursor-pointer disabled:opacity-50 ${isGameStarted ? "bg-ocean-900/40 border border-ocean-600/50 hover:bg-ocean-800/60 text-ocean-300" : "bg-pirate-black/80 border-2 border-blood-red hover:bg-blood-red/20 text-blood-red font-bold animate-pulse hover:animate-none"}`}
+          >
+            <Trophy className="w-4 h-4" /> {isGameStarted ? "Stop the Hunt" : "Start the Hunt"}
+          </button>
           <button 
             onClick={() => handleAction("reset_all")}
             disabled={loading}
@@ -179,12 +192,12 @@ export default function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {teams.length === 0 ? (
+              {displayTeams.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-ocean-600 italic">No crews found in the database.</td>
                 </tr>
               ) : (
-                teams.map((team, idx) => {
+                displayTeams.map((team, idx) => {
                   const isTop = idx === 0 && team.finished_at;
                   const medal = idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : null;
                   return (

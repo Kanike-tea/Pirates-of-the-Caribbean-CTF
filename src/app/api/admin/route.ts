@@ -50,6 +50,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: "All teams deleted successfully." });
     }
 
+    if (action === "start_game") {
+      // We use a dummy team to store the global game state to avoid schema migrations
+      const { error } = await supabaseAdmin
+        .from("teams")
+        .upsert({ name: "__GAME_STATE__", progress: 1 }, { onConflict: "name" });
+      if (error) throw error;
+      return NextResponse.json({ success: true, message: "Game started successfully." });
+    }
+
+    if (action === "stop_game") {
+      const { error } = await supabaseAdmin
+        .from("teams")
+        .upsert({ name: "__GAME_STATE__", progress: 0 }, { onConflict: "name" });
+      if (error) throw error;
+      return NextResponse.json({ success: true, message: "Game stopped successfully." });
+    }
+
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });
   } catch (error: unknown) {
     console.error("Admin API error:", error);
