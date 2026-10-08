@@ -26,7 +26,7 @@ To run this platform locally and set sail on your own machine:
 
 ### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Kanike-tea/Pirates-of-the-Caribbean-CTF
 cd Pirates-of-the-Caribbean-CTF
 ```
 
